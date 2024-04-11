@@ -1,0 +1,38 @@
+# Creating a shop instance
+shop = Shop()
+
+# Display initial inventory
+print("Initial Inventory:")
+shop.display_inventory()
+
+# Renting skis hourly
+shop.rent_equipment('skis', 3, 'hourly')
+
+# Renting snowboards daily
+shop.rent_equipment('snowboards', 2, 'daily')
+
+# Display updated inventory
+print("\nUpdated Inventory:")
+shop.display_inventory()
+
+# Display daily rental statistics
+print("\nDaily Rental Statistics:")
+print(f"Daily skis rented: {shop.daily_skis_rented}")
+print(f"Daily snowboards rented: {shop.daily_snowboards_rented}")
+print(f"Daily revenue: ${shop.daily_revenue}")
+
+# Renting skis weekly
+shop.rent_equipment('skis', 1, 'weekly')
+
+# Renting snowboards hourly with invalid quantity
+shop.rent_equipment('snowboards', 20, 'hourly')
+
+# Display updated inventory
+print("\nUpdated Inventory:")
+shop.display_inventory()
+
+# Display daily rental statistics
+print("\nDaily Rental Statistics:")
+print(f"Daily skis rented: {shop.daily_skis_rented}")
+print(f"Daily snowboards rented: {shop.daily_snowboards_rented}")
+print(f"Daily revenue: ${shop.daily_revenue}")
