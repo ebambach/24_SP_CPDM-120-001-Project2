@@ -10,7 +10,7 @@ import CustomerClass as Customer
 # ------------------------------------------------------------------
 
 try:
-	test0 = Customer.CustomerClass("Abby Normal", 1, 1, 2, 1, 0, 0, "")
+	test0 = Customer.CustomerClass("Test Case", 1, 1, 2, 1, 0, 0, "")
 	print(repr(test0))
 except Exception as e:
 	print(e)
