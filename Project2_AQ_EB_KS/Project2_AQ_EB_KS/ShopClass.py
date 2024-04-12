@@ -24,3 +24,41 @@ class Shop(object):
     def __init__(self, intInitialSkisInventory, intInitialSnowboardsInventory):
          self.intInitialSkisInventory = intInitialSkisInventory
          self.intInitialSnowboardsInventory = intInitialSnowboardsInventory
+
+# ------------------------------------------------------------------
+# Method for Calculating Estimate Rental Price (Best Price)
+# ------------------------------------------------------------------
+    def calc_estimatebestrentalprice(self, intRentalTime, strRentalBasis, intSkisRented, intSnowboardsRented, _dblTotalDiscountPercent):
+            self.strRentalBasis = strRentalBasis
+            self.intRentalTime = intRentalTime
+            self.intSkisRented = intSkisRented
+            self.intSnowboardsRented = intSnowboardsRented
+            _dblSkisHourly = float(15)
+            _dblSkisDaily = float(50)
+            _dblSkisWeekly = float(200)
+            _dblSnowboardsHourly = float(10)
+            _dblSnowboardsDaily = float(40)
+            _dblSnowboardsWeekly = float(160)
+
+            if strRentalBasis == "Hourly":
+                if intRentalTime * (_dblSkisHourly + _dblSnowboardsHourly) > _dblSkisWeekly + _dblSnowboardsWeekly:
+                      strRentalBasis = "Weekly"
+                      intRentalTime = math.ceil(intRentalTime  / 168)
+                      _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisWeekly) + (intSnowboardsRented * intRentalTime * _dblSnowboardsWeekly)) * (1 - (_dblTotalDiscountPercent / 100))
+                else:
+                     if intRentalTime * (_dblSkisHourly + _dblSnowboardsHourly) > _dblSkisDaily + _dblSnowboardsDaily:
+                          strRentalBasis = "Daily"
+                          intRentalTime = math.ceil(intRentalTime / 24)
+                          _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisDaily) + (intSnowboardsRented * intRentalTime * _dblSnowboardsDaily)) * (1 - (_dblTotalDiscountPercent / 100))
+                     else:
+                          _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisHourly) + (intSnowboardsRented * intRentalTime * _dblSnowboardsHourly)) * (1 - (_dblTotalDiscountPercent / 100))
+            else:
+                 if strRentalBasis == "Daily":
+                      if intRentalTime * (_dblSkisDaily * _dblSnowboardsDaily) > _dblSkisWeekly + _dblSkisDaily:
+                           strRentalBasis = "Daily"
+                           intRentalTime = math.ceil(intRentalTime / 7)
+                      else:
+                           _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisDaily) + (intSnowboardsRented * intRentalTime * _dblSnowboardsDaily)) * (1 - (_dblTotalDiscountPercent / 100))
+                 else:
+                      _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisWeekly) + (intSnowboardsRented * intRentalTime * _dblSnowboardsWeekly)) * (1 - (_dblTotalDiscountPercent / 100))
+            return _dblEstimateRentalPrice
