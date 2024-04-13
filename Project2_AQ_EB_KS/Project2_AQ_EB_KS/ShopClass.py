@@ -5,17 +5,19 @@
 # Used for .ceil function calculating ideal intRentalTime/strRentalBasis
 import math
 
-class Shop(object):
-
+class ShopClass(object):
+    # Initial Inventory
+     intInitialSkisInventory = int()
+     intInitialSnowboardsInventory = int()
     # Prices for Skis
     _dblSkisHourly = float(15)
     _dblSkisDaily = float(50)
     _dblSkisWeekly = float(200)
-	# Prices for Snowboards
+    # Prices for Snowboards
     _dblSnowboardsHourly = float(10)
     _dblSnowboardsDaily = float(40)
     _dblSnowboardsWeekly = float(160)
-	# Rental price
+    # Rental price
     _dblRentalPrice = float(0)
     _dblEstimateRentalPrice = float(0)
 
@@ -24,6 +26,40 @@ class Shop(object):
     def __init__(self, intInitialSkisInventory, intInitialSnowboardsInventory):
          self.intInitialSkisInventory = intInitialSkisInventory
          self.intInitialSnowboardsInventory = intInitialSnowboardsInventory
+	    
+     def __str__(self):
+          return "Initial Skis Inventory: {}, Initial Snowboards Inventory: {}".format(self.intInitialSkisInventory, self.intInitialSnowboardsInventory)
+
+# ------------------------------------------------------------------
+# ShopClass getters and setters
+# ------------------------------------------------------------------
+     @property
+     def intInitialSkisInventory(self):
+         return self._intInitialSkisInventory
+     
+     @intInitialSkisInventory.setter
+     def intInitialSkisInventory(self, intInput):
+          if intInput == int(intInput):
+               if intInput > -1:
+                     self._intInitialSkisInventory = intInput
+               else:
+                    raise Exception("Initial Skis Inventory must be an integer equal to or greater than 0. The value of Initial Skis Inventory was: {}".format(intInput))
+          else:
+               raise Exception("Initial Skis Inventory must be an integer equal to or greater than 0. The value of Initial Skis Inventory was: {}".format(intInput))
+          
+     @property
+     def intInitialSnowboardsInventory(self):
+         return self._intInitialSnowboardsInventory
+     
+     @intInitialSnowboardsInventory.setter
+     def intInitialSnowboardsInventory(self, intInput):
+          if intInput == int(intInput):
+               if intInput > -1:
+                     self._intInitialSnowboardsInventory = intInput
+               else:
+                    raise Exception("Initial Snowboards Inventory must be an integer equal to or greater than 0. The value of Initial Snowboards Inventory was: {}".format(intInput))
+          else:
+               raise Exception("Initial Snowboards Inventory must be an integer equal to or greater than 0. The value of Initial Snowboards Inventory was: {}".format(intInput))
 
 # ------------------------------------------------------------------
 # Method for Calculating Estimate Rental Price (Best Price)
