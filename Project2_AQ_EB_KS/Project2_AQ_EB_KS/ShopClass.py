@@ -51,9 +51,9 @@ class ShopClass(object):
                if intInput > -1:
                      self._intInitialSkisInventory = intInput
                else:
-                    raise Exception("Initial Skis Inventory must be an integer equal to or greater than -1. The value of Initial Skis Inventory was: {}".format(intInput))
+                    raise Exception("Initial Skis Inventory must be an integer equal to or greater than 0. The value of Initial Skis Inventory was: {}".format(intInput))
           else:
-               raise Exception("Initial Skis Inventory must be an integer equal to or greater than -1. The value of Initial Skis Inventory was: {}".format(intInput))
+               raise Exception("Initial Skis Inventory must be an integer equal to or greater than 0. The value of Initial Skis Inventory was: {}".format(intInput))
           
     @property
     def intInitialSnowboardsInventory(self):
@@ -65,9 +65,9 @@ class ShopClass(object):
                if intInput > -1:
                      self._intInitialSnowboardsInventory = intInput
                else:
-                    raise Exception("Initial Snowboards Inventory must be an integer equal to or greater than -1. The value of Initial Snowboards Inventory was: {}".format(intInput))
+                    raise Exception("Initial Snowboards Inventory must be an integer equal to or greater than 0. The value of Initial Snowboards Inventory was: {}".format(intInput))
           else:
-               raise Exception("Initial Snowboards Inventory must be an integer equal to or greater than -1. The value of Initial Snowboards Inventory was: {}".format(intInput))
+               raise Exception("Initial Snowboards Inventory must be an integer equal to or greater than 0. The value of Initial Snowboards Inventory was: {}".format(intInput))
 
     
 # ------------------------------------------------------------------
