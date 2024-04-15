@@ -7,8 +7,8 @@ import math
 
 class ShopClass(object):
     # Initial Inventory
-     intInitialSkisInventory = int()
-     intInitialSnowboardsInventory = int()
+    intInitialSkisInventory = int()
+    intInitialSnowboardsInventory = int()
     # Prices for Skis
     _dblSkisHourly = float(15)
     _dblSkisDaily = float(50)
@@ -26,19 +26,19 @@ class ShopClass(object):
     def __init__(self, intInitialSkisInventory, intInitialSnowboardsInventory):
          self.intInitialSkisInventory = intInitialSkisInventory
          self.intInitialSnowboardsInventory = intInitialSnowboardsInventory
-	    
-     def __str__(self):
+
+    def __str__(self):
           return "Initial Skis Inventory: {}, Initial Snowboards Inventory: {}".format(self.intInitialSkisInventory, self.intInitialSnowboardsInventory)
 
 # ------------------------------------------------------------------
 # ShopClass getters and setters
 # ------------------------------------------------------------------
-     @property
-     def intInitialSkisInventory(self):
+    @property
+    def intInitialSkisInventory(self):
          return self._intInitialSkisInventory
      
-     @intInitialSkisInventory.setter
-     def intInitialSkisInventory(self, intInput):
+    @intInitialSkisInventory.setter
+    def intInitialSkisInventory(self, intInput):
           if intInput == int(intInput):
                if intInput > -1:
                      self._intInitialSkisInventory = intInput
@@ -47,12 +47,12 @@ class ShopClass(object):
           else:
                raise Exception("Initial Skis Inventory must be an integer equal to or greater than 0. The value of Initial Skis Inventory was: {}".format(intInput))
           
-     @property
-     def intInitialSnowboardsInventory(self):
+    @property
+    def intInitialSnowboardsInventory(self):
          return self._intInitialSnowboardsInventory
      
-     @intInitialSnowboardsInventory.setter
-     def intInitialSnowboardsInventory(self, intInput):
+    @intInitialSnowboardsInventory.setter
+    def intInitialSnowboardsInventory(self, intInput):
           if intInput == int(intInput):
                if intInput > -1:
                      self._intInitialSnowboardsInventory = intInput
