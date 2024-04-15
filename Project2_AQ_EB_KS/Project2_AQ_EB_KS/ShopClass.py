@@ -1,73 +1,100 @@
+# ------------------------------------------------------------------
+# Project 2 Class Area: Shop Class
+# ------------------------------------------------------------------
+
+# Used for .ceil function calculating ideal intRentalTime/strRentalBasis
+import math
+
 class ShopClass(object):
-    """description of class"""
+    # Initial Inventory
+     intInitialSkisInventory = int()
+     intInitialSnowboardsInventory = int()
+    # Prices for Skis
+    _dblSkisHourly = float(15)
+    _dblSkisDaily = float(50)
+    _dblSkisWeekly = float(200)
+    # Prices for Snowboards
+    _dblSnowboardsHourly = float(10)
+    _dblSnowboardsDaily = float(40)
+    _dblSnowboardsWeekly = float(160)
+    # Rental price
+    _dblRentalPrice = float(0)
+    _dblEstimateRentalPrice = float(0)
 
-class Shop:
-    def __init__(self):
-        self.inventory = {'skis': 10, 'snowboards': 8}  # Initial inventory
-        self.daily_skis_rented = 0
-        self.daily_snowboards_rented = 0
-        self.daily_revenue = 0
+    intRentalTime = int(0)
 
-    def display_inventory(self):
-        print("Available Inventory:")
-        for item, quantity in self.inventory.items():
-            print(f"{item.capitalize()}: {quantity}")
+    def __init__(self, intInitialSkisInventory, intInitialSnowboardsInventory):
+         self.intInitialSkisInventory = intInitialSkisInventory
+         self.intInitialSnowboardsInventory = intInitialSnowboardsInventory
+	    
+     def __str__(self):
+          return "Initial Skis Inventory: {}, Initial Snowboards Inventory: {}".format(self.intInitialSkisInventory, self.intInitialSnowboardsInventory)
 
-    def rent_equipment(self, equipment_type, quantity, rental_period):
-        if equipment_type not in self.inventory:
-            print("Sorry, we don't have that equipment.")
-            return
+# ------------------------------------------------------------------
+# ShopClass getters and setters
+# ------------------------------------------------------------------
+     @property
+     def intInitialSkisInventory(self):
+         return self._intInitialSkisInventory
+     
+     @intInitialSkisInventory.setter
+     def intInitialSkisInventory(self, intInput):
+          if intInput == int(intInput):
+               if intInput > -1:
+                     self._intInitialSkisInventory = intInput
+               else:
+                    raise Exception("Initial Skis Inventory must be an integer equal to or greater than 0. The value of Initial Skis Inventory was: {}".format(intInput))
+          else:
+               raise Exception("Initial Skis Inventory must be an integer equal to or greater than 0. The value of Initial Skis Inventory was: {}".format(intInput))
+          
+     @property
+     def intInitialSnowboardsInventory(self):
+         return self._intInitialSnowboardsInventory
+     
+     @intInitialSnowboardsInventory.setter
+     def intInitialSnowboardsInventory(self, intInput):
+          if intInput == int(intInput):
+               if intInput > -1:
+                     self._intInitialSnowboardsInventory = intInput
+               else:
+                    raise Exception("Initial Snowboards Inventory must be an integer equal to or greater than 0. The value of Initial Snowboards Inventory was: {}".format(intInput))
+          else:
+               raise Exception("Initial Snowboards Inventory must be an integer equal to or greater than 0. The value of Initial Snowboards Inventory was: {}".format(intInput))
 
-        if quantity > self.inventory[equipment_type]:
-            print("Sorry, we don't have enough inventory for that quantity.")
-            return
+# ------------------------------------------------------------------
+# Method for Calculating Estimate Rental Price (Best Price)
+# ------------------------------------------------------------------
+    def calc_estimatebestrentalprice(self, intRentalTime, strRentalBasis, intSkisRented, intSnowboardsRented, _dblTotalDiscountPercent):
+            self.strRentalBasis = strRentalBasis
+            self.intRentalTime = intRentalTime
+            self.intSkisRented = intSkisRented
+            self.intSnowboardsRented = intSnowboardsRented
+            _dblSkisHourly = float(15)
+            _dblSkisDaily = float(50)
+            _dblSkisWeekly = float(200)
+            _dblSnowboardsHourly = float(10)
+            _dblSnowboardsDaily = float(40)
+            _dblSnowboardsWeekly = float(160)
 
-        if rental_period == "hourly":
-            price = self.get_hourly_price(equipment_type) * quantity
-        elif rental_period == "daily":
-            price = self.get_daily_price(equipment_type) * quantity
-        elif rental_period == "weekly":
-            price = self.get_weekly_price(equipment_type) * quantity
-        else:
-            print("Invalid rental period.")
-            return
-
-        self.inventory[equipment_type] -= quantity
-        self.update_daily_rental_stats(equipment_type, quantity)
-        self.daily_revenue += price
-        print(f"Renting {quantity} {equipment_type} for {rental_period} at ${price}")
-
-    def update_daily_rental_stats(self, equipment_type, quantity):
-        if equipment_type == 'skis':
-            self.daily_skis_rented += quantity
-        elif equipment_type == 'snowboards':
-            self.daily_snowboards_rented += quantity
-
-    def get_hourly_price(self, equipment_type):
-        if equipment_type == 'skis':
-            return 15
-        elif equipment_type == 'snowboards':
-            return 10
-
-    def get_daily_price(self, equipment_type):
-        if equipment_type == 'skis':
-            return 50
-        elif equipment_type == 'snowboards':
-            return 40
-
-    def get_weekly_price(self, equipment_type):
-        if equipment_type == 'skis':
-            return 200
-        elif equipment_type == 'snowboards':
-            return 160
-
-# Testing the Shop class
-shop = Shop()
-shop.display_inventory()
-shop.rent_equipment('skis', 2, 'daily')
-shop.rent_equipment('snowboards', 1, 'weekly')
-shop.display_inventory()
-print(f"Daily skis rented: {shop.daily_skis_rented}")
-print(f"Daily snowboards rented: {shop.daily_snowboards_rented}")
-print(f"Daily revenue: ${shop.daily_revenue}")
-
+            if strRentalBasis == "Hourly":
+                if intRentalTime * (_dblSkisHourly + _dblSnowboardsHourly) > _dblSkisWeekly + _dblSnowboardsWeekly:
+                      strRentalBasis = "Weekly"
+                      intRentalTime = math.ceil(intRentalTime  / 168)
+                      _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisWeekly) + (intSnowboardsRented * intRentalTime * _dblSnowboardsWeekly)) * (1 - (_dblTotalDiscountPercent / 100))
+                else:
+                     if intRentalTime * (_dblSkisHourly + _dblSnowboardsHourly) > _dblSkisDaily + _dblSnowboardsDaily:
+                          strRentalBasis = "Daily"
+                          intRentalTime = math.ceil(intRentalTime / 24)
+                          _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisDaily) + (intSnowboardsRented * intRentalTime * _dblSnowboardsDaily)) * (1 - (_dblTotalDiscountPercent / 100))
+                     else:
+                          _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisHourly) + (intSnowboardsRented * intRentalTime * _dblSnowboardsHourly)) * (1 - (_dblTotalDiscountPercent / 100))
+            else:
+                 if strRentalBasis == "Daily":
+                      if intRentalTime * (_dblSkisDaily * _dblSnowboardsDaily) > _dblSkisWeekly + _dblSkisDaily:
+                           strRentalBasis = "Daily"
+                           intRentalTime = math.ceil(intRentalTime / 7)
+                      else:
+                           _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisDaily) + (intSnowboardsRented * intRentalTime * _dblSnowboardsDaily)) * (1 - (_dblTotalDiscountPercent / 100))
+                 else:
+                      _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * _dblSkisWeekly) + (intSnowboardsRented * intRentalTime * _dblSnowboardsWeekly)) * (1 - (_dblTotalDiscountPercent / 100))
+            return _dblEstimateRentalPrice
