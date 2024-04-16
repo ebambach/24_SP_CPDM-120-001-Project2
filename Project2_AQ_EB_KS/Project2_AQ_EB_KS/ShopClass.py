@@ -260,8 +260,8 @@ class ShopClass(object):
 
         _intOrderItemsRented = self.intSkisRented + self.intSnowboardsRented
 
-        if _intOrderItemsRented >= 3 and _intOrderItemsRented <= 5:
-            print("You are eligible for a family rental promotion of 25% discount.")
+        if _intOrderItemsRented >= 3:
+            print("You are eligible for a family rental promotion of 25% discount for up to five items on one order.")
             _dblFamilyDiscount = 25
 
     # Applying discount based on the coupon code
