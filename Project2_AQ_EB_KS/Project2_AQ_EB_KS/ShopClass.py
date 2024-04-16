@@ -264,7 +264,7 @@ def strCouponCode(self):
 			self._strCouponCode = ""
 			raise Exception("The coupon code has to have letters. The value of strCouponCode was: {}".format(strInput))
 
-    # Applying discount based on the total number of items rented
+ # Applying discount based on the total number of items rented
  def apply_discount(self):
     if _intTotalItemsRented >= 3 and _intTotalItemsRented <= 5:
         print("You are eligible for a Family rental promotion of 25% discount.")
@@ -272,9 +272,12 @@ def strCouponCode(self):
 
     # Applying discount based on the coupon code
  def apply_coupon(self):
-    if strCouponCode.endswith("***BBP"):
+    if strCouponCode.endswith("BBP"):
         print("Coupon code applied. You received a 10% discount.")
         _dblTotalDiscountPercent += 10
+
+
+	 
 # ------------------------------------------------------------------
 # Method for Calculating Estimate Rental Price (Best Price)
 # ------------------------------------------------------------------
