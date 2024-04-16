@@ -29,7 +29,7 @@ class ShopClass(object):
 
     # Set the initial quantity of Skis and Snowboards, each with a default amount of 0
     # When everything starts, the current quantity should match the initial quantity
-    def __init__(self, intInitialSkisInventory = 1, intInitialSnowboardsInventory = 0):
+    def __init__(self, intInitialSkisInventory = 0, intInitialSnowboardsInventory = 0):
          self.intInitialSkisInventory = intInitialSkisInventory
          self.intInitialSnowboardsInventory = intInitialSnowboardsInventory
          self.intCurrentSkisInventory = self.intInitialSkisInventory
