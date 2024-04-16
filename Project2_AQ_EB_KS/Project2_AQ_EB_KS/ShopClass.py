@@ -29,7 +29,7 @@ class ShopClass(object):
 
     # Set the initial quantity of Skis and Snowboards, each with a default amount of 0
     # When everything starts, the current quantity should match the initial quantity
-    def __init__(self, intInitialSkisInventory = 0, intInitialSnowboardsInventory = 0):
+    def __init__(self, intInitialSkisInventory = 1, intInitialSnowboardsInventory = 0):
          self.intInitialSkisInventory = intInitialSkisInventory
          self.intInitialSnowboardsInventory = intInitialSnowboardsInventory
          self.intCurrentSkisInventory = self.intInitialSkisInventory
@@ -48,7 +48,7 @@ class ShopClass(object):
     @intInitialSkisInventory.setter
     def intInitialSkisInventory(self, intInput):
           if intInput == int(intInput):
-               if intInput > -1:
+               if intInput > 0:
                      self._intInitialSkisInventory = intInput
                else:
                     raise Exception("Initial Skis Inventory must be an integer equal to or greater than 0. The value of Initial Skis Inventory was: {}".format(intInput))
@@ -62,7 +62,7 @@ class ShopClass(object):
     @intInitialSnowboardsInventory.setter
     def intInitialSnowboardsInventory(self, intInput):
           if intInput == int(intInput):
-               if intInput > -1:
+               if intInput > 0:
                      self._intInitialSnowboardsInventory = intInput
                else:
                     raise Exception("Initial Snowboards Inventory must be an integer equal to or greater than 0. The value of Initial Snowboards Inventory was: {}".format(intInput))
@@ -74,8 +74,8 @@ class ShopClass(object):
 # Method to display the currently available number of Skis and Snowboards
 # ------------------------------------------------------------------    
     def display_CurrentInventory(self):
-        print("There are currently {} pairs of skis available to rent.".format(self.intCurrentSkisInventory))
-        print("There are currently {} snowboards available to rent.".format(self.intCurrentSnowboardsInventory))
+        print("There are currently " + str(self.intCurrentSkisInventory) + " pairs of skis available to rent.")
+        print("There are currently " + str(self.intCurrentSnowboardsInventory) + " snowboards available to rent.")
 
 
 
@@ -90,15 +90,15 @@ class ShopClass(object):
     def rentSkisHourly(self, intRequestedSkis):
         # If the customer is trying to rent Skis, make sure that the number request is greater  -1 
         if intRequestedSkis < 0:
-            print("This rental cannot be completed by asking to rent {} pairs of skis.".format(intRequestedSkis))
+            print("This rental cannot be completed by asking to rent " + str(intRequestedSkis) + " pairs of skis.")
             print("Please try again with a number of skis greater than -1, if you would like to rent skis.")
             return None
 
         # If the number of skis requested is greater than -1, make sure that the number requested does
         # not exceed the number currently available       
         elif intRequestedSkis > self.intCurrentSkisInventory:
-            print("This rental cannot be completed, {} pairs of skis is more than what is currently available.".format(intRequestedSkis))
-            print("We currently have {} pairs of skis available to rent.".format(self.intCurrentSkisInventory))
+            print("This rental cannot be completed, " + str(intRequestedSkis) + " pairs of skis is more than what is currently available.")
+            print("We currently have " + str(intCurrentSkisInventory) + " pairs of skis available to rent.")
             return None
         # With the numbers validated, complete the rental.                
         else:
@@ -106,11 +106,12 @@ class ShopClass(object):
             # State how many Skis they rented, that the time basis is hourly, at what time the rental occurred, and how much
             # each pair of Skis cost to rent.
             if intRequestedSkis == 1:
-                print("You have successfully rented {} pair of skis on an hourly basis.").format(intRequestedSkis)
+                print("You have successfully rented " + str(intRequestedSkis) +" pair of skis on an hourly basis.")
             else:
-                print("You have rented {} pairs of skis on an hourly basis.".format(intRequestedSkis))
-            print("Your rental began on month {}, day {}, at {}:{}.".format(now.month, now.day, now.hour, now.minute))
-            print("The hourly rent ${} per hour for each pair of skis.".format(_dblSkisHourly))
+                print("You have rented " + str(intRequestedSkis) + " pairs of skis on an hourly basis.")
+            print("Your rental began on " + str(now.month) + "-" + str(now.day) + "-" + str(now.year) + 
+                  " at " + str(now.hour) + ":" + str(now.minute) + ".")
+            print("The hourly rent $" + str(self._dblSkisHourly) + " per hour for each pair of skis.")
             # Reduce the current inventory by the quantity of Skis that were rented.
             self.intCurrentSkisInventory -= intRequestedSkis
             return now
@@ -121,17 +122,17 @@ class ShopClass(object):
 # Method to rent Snowboards on an hourly basis
 # ------------------------------------------------------------------  
     def rentSnowboardsHourly(self, intRequestedSnowboards):
-        # If the customer is trying to rent Snowboards, make sure that the number request is greater than -1 
+        # If the customer is trying to rent Snowboards, make sure that the number request is greater  -1 
         if intRequestedSnowboards < 0:
-            print("This rental cannot be completed by asking to rent {} snowboards.".format(intRequestedSnowboards))
-            print("Please try again with a number of snowboards greater than -1, if you would like to rent snowboards.")
+            print("This rental cannot be completed by asking to rent " + str(intRequestedSnowboards) + " pairs of skis.")
+            print("Please try again with a number of skis greater than -1, if you would like to rent skis.")
             return None
 
-        # If the number of snowboards requested is greater than -1, make sure that the number requested does
+        # If the number of skis requested is greater than -1, make sure that the number requested does
         # not exceed the number currently available       
         elif intRequestedSnowboards > self.intCurrentSnowboardsInventory:
-            print("This rental cannot be completed, {} snowboards is more than what is currently available.".format(intRequestedSnowboards))
-            print("We currently have {} snowboards available to rent.".format(self.intCurrentSnowboardsInventory))
+            print("This rental cannot be completed, " + str(intRequestedSnowboards) + " pairs of skis is more than what is currently available.")
+            print("We currently have " + str(intCurrentSnowboardsInventory) + " pairs of skis available to rent.")
             return None
         # With the numbers validated, complete the rental.                
         else:
@@ -139,10 +140,12 @@ class ShopClass(object):
             # State how many Snowboards they rented, that the time basis is hourly, at what time the rental occurred, and how much
             # each pair of Snowboards cost to rent.
             if intRequestedSnowboards == 1:
-                print("You have rented {} snowboard on hourly basis.".format(intRequestedSnowboards))
+                print("You have successfully rented " + str(intRequestedSnowboards) + " snowboards on an hourly basis.")
             else:
-                print("You have rented {} snowboards on hourly basis.".format(intRequestedSnowboards))
-            print("The hourly rent is ${} per hour for each snowboard.".format(_dblSnowboardsHourly))
+                print("You have rented " + str(intRequestedSnowboards) + " pairs of skis on an hourly basis.")
+            print("Your rental began on " + str(now.month) + "-" + str(now.day) + "-" + str(now.year) + 
+                  " at " + str(now.hour) + ":" + str(now.minute) + ".")
+            print("The hourly rent $" + str(self._dblSnowboardsHourly) + " per hour for each snowboards.")
             # Reduce the current inventory by the quantity of Snowboards that were rented.
             self.intCurrentSnowboardsInventory -= intRequestedSnowboards
             return now
@@ -153,17 +156,17 @@ class ShopClass(object):
 # Method to rent Skis on a daily basis
 # ------------------------------------------------------------------  
     def rentSkisDaily(self, intRequestedSkis):
-        # If the customer is trying to rent Skis, make sure that the number request is greater than -1 
+        # If the customer is trying to rent Skis, make sure that the number request is greater  -1 
         if intRequestedSkis < 0:
-            print("This rental cannot be completed by asking to rent {} pairs of skis.".format(intRequestedSkis))
+            print("This rental cannot be completed by asking to rent " + str(intRequestedSkis) + " pairs of skis.")
             print("Please try again with a number of skis greater than -1, if you would like to rent skis.")
             return None
 
         # If the number of skis requested is greater than -1, make sure that the number requested does
         # not exceed the number currently available       
         elif intRequestedSkis > self.intCurrentSkisInventory:
-            print("This rental cannot be completed, {} pairs of skis is more than what is currently available.".format(intRequestedSkis))
-            print("We currently have {} pairs of skis available to rent.".format(self.intCurrentSkisInventory))
+            print("This rental cannot be completed, " + str(intRequestedSkis) + " pairs of skis is more than what is currently available.")
+            print("We currently have " + str(intCurrentSkisInventory) + " pairs of skis available to rent.")
             return None
         # With the numbers validated, complete the rental.                
         else:
@@ -171,14 +174,15 @@ class ShopClass(object):
             # State how many Skis they rented, that the time basis is daily, at what time the rental occurred, and how much
             # each pair of Skis cost to rent.
             if intRequestedSkis == 1:
-                print("You have rented {} pair of skis on daily basis.".format(intRequestedSkis))                
+                print("You have successfully rented " + str(intRequestedSkis) +" pair of skis on a daily basis.")
             else:
-                print("You have rented {} pairs of skis on daily basis today at {} hours.".format(intRequestedSkis))
-            print("Your rental began on month {}, day {}, at {}:{}.".format(now.month, now.day, now.hour, now.minute))
-            print("The daily rent is ${} per day for each pair of skis.".format(_dblSkisDaily))
+                print("You have rented " + str(intRequestedSkis) + " pairs of skis on a daily basis.")
+            print("Your rental began on " + str(now.month) + "-" + str(now.day) + "-" + str(now.year) + 
+                  " at " + str(now.hour) + ":" + str(now.minute) + ".")
+            print("The daily rent $" + str(self._dblSkisHourly) + " per day for each pair of skis.")
             # Reduce the current inventory by the quantity of Skis that were rented.
             self.intCurrentSkisInventory -= intRequestedSkis
-            return now     
+            return now
 
 
 
@@ -186,17 +190,17 @@ class ShopClass(object):
 # Method to rent Snowboards on a daily basis
 # ------------------------------------------------------------------  
     def rentSnowboardsDaily(self, intRequestedSnowboards):
-        # If the customer is trying to rent Snowboards, make sure that the number request is greater than -1 
+        # If the customer is trying to rent Snowboards, make sure that the number request is greater  -1 
         if intRequestedSnowboards < 0:
-            print("This rental cannot be completed by asking to rent {} snowboards.".format(intRequestedSnowboards))
-            print("Please try again with a number of snowboards greater than -1, if you would like to rent snowboards.")
+            print("This rental cannot be completed by asking to rent " + str(intRequestedSnowboards) + " pairs of skis.")
+            print("Please try again with a number of skis greater than -1, if you would like to rent skis.")
             return None
 
-        # If the number of snowboards requested is greater than -1, make sure that the number requested does
+        # If the number of skis requested is greater than -1, make sure that the number requested does
         # not exceed the number currently available       
         elif intRequestedSnowboards > self.intCurrentSnowboardsInventory:
-            print("This rental cannot be completed, {} snowboards is more than what is currently available.".format(intRequestedSnowboards))
-            print("We currently have {} snowboards available to rent.".format(self.intCurrentSnowboardsInventory))
+            print("This rental cannot be completed, " + str(intRequestedSnowboards) + " pairs of skis is more than what is currently available.")
+            print("We currently have " + str(intCurrentSnowboardsInventory) + " pairs of skis available to rent.")
             return None
         # With the numbers validated, complete the rental.                
         else:
@@ -204,14 +208,15 @@ class ShopClass(object):
             # State how many Snowboards they rented, that the time basis is daily, at what time the rental occurred, and how much
             # each pair of Snowboards cost to rent.
             if intRequestedSnowboards == 1:
-                print("You have rented {} snowboard on daily basis.".format(intRequestedSnowboards))                
+                print("You have successfully rented " + str(intRequestedSnowboards) + " snowboards on a daily basis.")
             else:
-                print("You have rented {} snowboards on daily basis today at {} hours.".format(intRequestedSnowboards))
-            print("Your rental began on month {}, day {}, at {}:{}.".format(now.month, now.day, now.hour, now.minute))
-            print("The daily rent is ${} per day for each snowboard.".format(_dblSnowboardsDaily))
+                print("You have rented " + str(intRequestedSnowboards) + " pairs of skis on a daily basis.")
+            print("Your rental began on " + str(now.month) + "-" + str(now.day) + "-" + str(now.year) + 
+                  " at " + str(now.hour) + ":" + str(now.minute) + ".")
+            print("The daily rent $" + str(self._dblSnowboardsHourly) + " per day for each snowboards.")
             # Reduce the current inventory by the quantity of Snowboards that were rented.
             self.intCurrentSnowboardsInventory -= intRequestedSnowboards
-            return now 
+            return now
 
 
 
@@ -219,17 +224,17 @@ class ShopClass(object):
 # Method to rent Skis on a weekly basis
 # ------------------------------------------------------------------  
     def rentSkisWeekly(self, intRequestedSkis):
-        # If the customer is trying to rent Skis, make sure that the number request is greater than -1 
+        # If the customer is trying to rent Skis, make sure that the number request is greater  -1 
         if intRequestedSkis < 0:
-            print("This rental cannot be completed by asking to rent {} pairs of skis.".format(intRequestedSkis))
+            print("This rental cannot be completed by asking to rent " + str(intRequestedSkis) + " pairs of skis.")
             print("Please try again with a number of skis greater than -1, if you would like to rent skis.")
             return None
 
         # If the number of skis requested is greater than -1, make sure that the number requested does
         # not exceed the number currently available       
         elif intRequestedSkis > self.intCurrentSkisInventory:
-            print("This rental cannot be completed, {} pairs of skis is more than what is currently available.".format(intRequestedSkis))
-            print("We currently have {} pairs of skis available to rent.".format(self.intCurrentSkisInventory))
+            print("This rental cannot be completed, " + str(intRequestedSkis) + " pairs of skis is more than what is currently available.")
+            print("We currently have " + str(intCurrentSkisInventory) + " pairs of skis available to rent.")
             return None
         # With the numbers validated, complete the rental.                
         else:
@@ -237,14 +242,15 @@ class ShopClass(object):
             # State how many Skis they rented, that the time basis is weekly, at what time the rental occurred, and how much
             # each pair of Skis cost to rent.
             if intRequestedSkis == 1:
-                print("You have rented {} pair of skis on weekly basis.".format(intRequestedSkis))                
+                print("You have successfully rented " + str(intRequestedSkis) +" pair of skis on a weekly basis.")
             else:
-                print("You have rented {} pairs of skis on weekly basis today at {} hours.".format(intRequestedSkis))
-            print("Your rental began on month {}, day {}, at {}:{}.".format(now.month, now.day, now.hour, now.minute))
-            print("The weekly rent is ${} per day for each pair of skis.".format(_dblSkisWeekly))
+                print("You have rented " + str(intRequestedSkis) + " pairs of skis on a weekly basis.")
+            print("Your rental began on " + str(now.month) + "-" + str(now.day) + "-" + str(now.year) + 
+                  " at " + str(now.hour) + ":" + str(now.minute) + ".")
+            print("The weekly rent $" + str(self._dblSkisHourly) + " per week for each pair of skis.")
             # Reduce the current inventory by the quantity of Skis that were rented.
             self.intCurrentSkisInventory -= intRequestedSkis
-            return now 
+            return now
 
 
 
@@ -252,17 +258,17 @@ class ShopClass(object):
 # Method to rent Snowboards on a weekly basis
 # ------------------------------------------------------------------  
     def rentSnowboardsWeekly(self, intRequestedSnowboards):
-        # If the customer is trying to rent Snowboards, make sure that the number request is greater than -1 
+        # If the customer is trying to rent Snowboards, make sure that the number request is greater  -1 
         if intRequestedSnowboards < 0:
-            print("This rental cannot be completed by asking to rent {} snowboards.".format(intRequestedSnowboards))
-            print("Please try again with a number of snowboards greater than -1, if you would like to rent snowboards.")
+            print("This rental cannot be completed by asking to rent " + str(intRequestedSnowboards) + " pairs of skis.")
+            print("Please try again with a number of skis greater than -1, if you would like to rent skis.")
             return None
 
-        # If the number of snowboards requested is greater than -1, make sure that the number requested does
+        # If the number of skis requested is greater than -1, make sure that the number requested does
         # not exceed the number currently available       
         elif intRequestedSnowboards > self.intCurrentSnowboardsInventory:
-            print("This rental cannot be completed, {} snowboards is more than what is currently available.".format(intRequestedSnowboards))
-            print("We currently have {} snowboards available to rent.".format(self.intCurrentSnowboardsInventory))
+            print("This rental cannot be completed, " + str(intRequestedSnowboards) + " pairs of skis is more than what is currently available.")
+            print("We currently have " + str(intCurrentSnowboardsInventory) + " pairs of skis available to rent.")
             return None
         # With the numbers validated, complete the rental.                
         else:
@@ -270,14 +276,15 @@ class ShopClass(object):
             # State how many Snowboards they rented, that the time basis is weekly, at what time the rental occurred, and how much
             # each pair of Snowboards cost to rent.
             if intRequestedSnowboards == 1:
-                print("You have rented {} snowboard on weekly basis.".format(intRequestedSnowboards))                
+                print("You have successfully rented " + str(intRequestedSnowboards) + " snowboards on a weekly basis.")
             else:
-                print("You have rented {} snowboards on weekly basis today at {} hours.".format(intRequestedSnowboards))
-            print("Your rental began on month {}, day {}, at {}:{}.".format(now.month, now.day, now.hour, now.minute))
-            print("The weekly rent is ${} per day for each snowboard.".format(_dblSnowboardsWeekly))
+                print("You have rented " + str(intRequestedSnowboards) + " pairs of skis on a weekly basis.")
+            print("Your rental began on " + str(now.month) + "-" + str(now.day) + "-" + str(now.year) + 
+                  " at " + str(now.hour) + ":" + str(now.minute) + ".")
+            print("The weekly rent $" + str(self._dblSnowboardsHourly) + " per week for each snowboards.")
             # Reduce the current inventory by the quantity of Snowboards that were rented.
             self.intCurrentSnowboardsInventory -= intRequestedSnowboards
-            return now 
+            return now
 
 
 
