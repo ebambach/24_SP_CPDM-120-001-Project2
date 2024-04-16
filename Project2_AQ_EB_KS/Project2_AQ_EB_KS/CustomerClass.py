@@ -8,45 +8,30 @@
 # ------------------------------------------------------------------
 class CustomerClass(object):
 	_intTotalItemsRented = int(0)
-	# Prices for Skis
-	_dblSkisHourly = float(15)
-	_dblSkisDaily = float(50)
-	_dblSkilsWeekly = float(200)
-	# Prices for Snowboards
-	_dblSnowboardsHourly = float(10)
-	_dblSnowboardsDaily = float(40)
-	_dblSnowboardsWeekly = float(160)
-	# Rental price
-	_dblRentalPrice = float(0)
-	# Discount, can get 10% for coupon and/or 25% for "family" order of 3-5 items
 	_dblDiscount = float(0)
 # ------------------------------------------------------------------
 # CustomerClass constructor
 # ------------------------------------------------------------------	
-	def __init__(self, strName, intID, intSkisRented = 0, intSnowboardsRented = 0, intRentalHours = 0, 
-			  intRentalDays = 0, intRentalWeeks = 0, strCouponCode = ""):
+	def __init__(self, strName, intID, intRentalTime, strRentalBasis, intSkisRented = 0, intSnowboardsRented = 0, intRentalWeeks = 0, strCouponCode = ""):
 		self.strName = strName
 		self.intID = intID
+		self.intRentalTime = intRentalTime
+		self.strRentalBasis = strRentalBasis
 		self.intSkisRented = intSkisRented
 		self.intSnowboardsRented = intSnowboardsRented
-		self.intRentalHours = intRentalHours
-		self.intRentalDays = intRentalDays
-		self.intRentalWeeks = intRentalWeeks
 		self.strCouponCode = strCouponCode
 
 		CustomerClass._intTotalItemsRented = self.intSkisRented + self.intSnowboardsRented
 
 	def __str__(self):
 		return "The Customer is renting {} items".format(CustomerClass._intTotalItemsRented)
-	
+ 
 	def __repr__(self):
-		strRepr = ("Name: {}, ID: {}, \n# of Skis rented: {}, # of Snowboards rented: {}," 
-		"\n# of hours: {}, # of days: {}, # of weeks: {},"
-	    "\nCoupon code: {}".format(self.strName, self.intID, self.intSkisRented, 
-		self.intSnowboardsRented, self.intRentalHours, self.intRentalDays, self.intRentalWeeks, self.strCouponCode))
+		strRepr = ("Name: {} \nID: {} \nRental Duration: {}, {}\n# of Skis rented: {} \n# of Snowboards rented: {}" 
+	    "\nCoupon code: {}".format(self.strName, self.intID, self.intRentalTime, self.strRentalBasis, self.intSkisRented, 
+		self.intSnowboardsRented, self.strCouponCode))
 		return strRepr
 
-		
 # ------------------------------------------------------------------
 # CustomerClass getters and setters
 # ------------------------------------------------------------------	
@@ -81,11 +66,13 @@ class CustomerClass(object):
 	
 	@intSkisRented.setter
 	def intSkisRented(self, intInput):
-		if(intInput < 0):
-			raise Exception("The number of Skis rented has to be greater than 0. The value of intSkisRented was: {}".format(intInput))
-			self._intSkisRented = 0
+		if intInput == int(intInput):
+			if intInput > -1:
+				self._intSkisRented = intInput
+			else:
+				raise Exception("Skis Rented must be an integer equal to or greater than 0. The value of Skis Rented was: {}".format(intInput))
 		else:
-			self._intSkisRented = intInput
+			raise Exception("Skis Rented must be an integer equal to or greater than 0. The value of Skis Rented was: {}".format(intInput))
 
 	@property
 	def intSnowboardsRented(self):
@@ -93,47 +80,40 @@ class CustomerClass(object):
 	
 	@intSnowboardsRented.setter
 	def intSnowboardsRented(self, intInput):
-		if(intInput < 0):
-			raise Exception("The number of Snowboards rented has to be greater than 0. The value of intSnowboardsRented was: {}".format(intInput))
-			self._intSnowboardsRented = 0
+		if intInput == int(intInput):
+			if intInput > -1:
+				self._intSnowboardsRented = intInput
+			else:
+				raise Exception("Snowboards Rented must be an integer equal to or greater than 0. The value of Snowboards Rented was: {}".format(intInput))
 		else:
-			self._intSnowboardsRented = intInput
+			raise Exception("Snowboards Rented must be an integer equal to or greater than 0. The value of Snowboards Rented was: {}".format(intInput))
+
 
 	@property
-	def intRentalHours(self):
-		return self._intRentalHours
+	def intRentalTime(self):
+		return self._intRentalTime
 	
-	@intRentalHours.setter
-	def intRentalHours(self, intInput):
-		if(intInput < 0):
-			raise Exception("The number of hours for a rental has to be greater than 0. The value of intRentalHours was: {}".format(intInput))
-			self._intRentalHours = 0
+	@intRentalTime.setter
+	def intRentalTime(self, intInput):
+		if intInput == int(intInput):
+			if intInput > -1:
+				self._intRentalTime = intInput
+			else:
+				raise Exception("Rental Time must be an integer equal to or greater than 0. The value of Rental Time was: {}".format(intInput))
 		else:
-			self._intRentalHours = intInput
+			raise Exception("Rental Time must be an integer equal to or greater than 0. The value of Rental Time was: {}".format(intInput))
 
 	@property
-	def intRentalDays(self):
-		return self._intRentalDays
-			
-	@intRentalDays.setter
-	def intRentalDays(self, intInput):
-		if(intInput < 0):
-			raise Exception("The number of days for a rental has to be greater than 0. The value of intRentalDays was: {}".format(intInput))
-			self._intRentalDays = 0
-		else:
-			self._intRentalDays = intInput
+	def strRentalBasis(self):
+		return self._strRentalBasis
 
-	@property
-	def intRentalWeeks(self):
-		return self._intRentalWeeks
-			
-	@intRentalWeeks.setter
-	def intRentalWeeks(self, intInput):
-		if(intInput < 0):
-			raise Exception("The number of weeks for a rental has to be greater than 0. The value of intRentalWeeks was: {}".format(intInput))
-			self._intRentalWeeks = 0
+	@strRentalBasis.setter
+	def strRentalBasis(self, intInput):
+		if (intInput == "Hourly") or (intInput == "Daily") or (intInput == "Weekly"):
+			self._strRentalBasis = intInput
 		else:
-			self._intRentalWeeks = intInput
+			raise Exception("The rental basis must be Hourly, Daily, or Weekly. The rental basis entered was: {}".format(intInput))
+			self._strRentalBasis = ""
 
 	@property
 	def strCouponCode(self):
@@ -146,3 +126,9 @@ class CustomerClass(object):
 		else:
 			self._strCouponCode = ""
 			raise Exception("The coupon code has to have letters. The value of strCouponCode was: {}".format(strInput))
+		
+# Testing
+
+Test = CustomerClass("Ana", 123, 8, "Hourly", 2, 2.2)
+print(Test)
+print(repr(Test))
