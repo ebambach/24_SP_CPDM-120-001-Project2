@@ -46,6 +46,7 @@ class CustomerClass(object):
 		else:
 			self._strName = ""
 			raise Exception("The Name has to have letters. The value of Name was: {}".format(strInput))
+
 	
 	@property
 	def intID(self):
@@ -65,11 +66,13 @@ class CustomerClass(object):
 	
 	@intSkisRented.setter
 	def intSkisRented(self, intInput):
-		if(intInput < 0):
-			raise Exception("The number of Skis rented has to be greater than 0. The value of intSkisRented was: {}".format(intInput))
-			self._intSkisRented = 0
+		if intInput == int(intInput):
+			if intInput > -1:
+				self._intSkisRented = intInput
+			else:
+				raise Exception("Skis Rented must be an integer equal to or greater than 0. The value of Skis Rented was: {}".format(intInput))
 		else:
-			self._intSkisRented = intInput
+			raise Exception("Skis Rented must be an integer equal to or greater than 0. The value of Skis Rented was: {}".format(intInput))
 
 	@property
 	def intSnowboardsRented(self):
@@ -77,11 +80,14 @@ class CustomerClass(object):
 	
 	@intSnowboardsRented.setter
 	def intSnowboardsRented(self, intInput):
-		if(intInput < 0):
-			raise Exception("The number of Snowboards rented has to be greater than 0. The value of intSnowboardsRented was: {}".format(intInput))
-			self._intSnowboardsRented = 0
+		if intInput == int(intInput):
+			if intInput > -1:
+				self._intSnowboardsRented = intInput
+			else:
+				raise Exception("Snowboards Rented must be an integer equal to or greater than 0. The value of Snowboards Rented was: {}".format(intInput))
 		else:
-			self._intSnowboardsRented = intInput
+			raise Exception("Snowboards Rented must be an integer equal to or greater than 0. The value of Snowboards Rented was: {}".format(intInput))
+
 
 	@property
 	def intRentalTime(self):
@@ -89,11 +95,13 @@ class CustomerClass(object):
 	
 	@intRentalTime.setter
 	def intRentalTime(self, intInput):
-		if(intInput < 0):
-			raise Exception("The rental time has to be greater than 0. The value of intRentalTime was: {}".format(intInput))
-			self._intRentalTime = 0
+		if intInput == int(intInput):
+			if intInput > -1:
+				self._intRentalTime = intInput
+			else:
+				raise Exception("Rental Time must be an integer equal to or greater than 0. The value of Rental Time was: {}".format(intInput))
 		else:
-			self._intRentalTime = intInput
+			raise Exception("Rental Time must be an integer equal to or greater than 0. The value of Rental Time was: {}".format(intInput))
 
 	@property
 	def strRentalBasis(self):
@@ -121,6 +129,6 @@ class CustomerClass(object):
 		
 # Testing
 
-Test = CustomerClass("Ana", 123, 8, "Hourly", 2, 2)
+Test = CustomerClass("Ana", 123, 8, "Hourly", 2, 2.2)
 print(Test)
 print(repr(Test))
