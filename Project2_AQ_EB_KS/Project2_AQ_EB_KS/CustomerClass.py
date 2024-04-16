@@ -25,13 +25,6 @@ class CustomerClass(object):
 
 	def __str__(self):
 		return "The Customer is renting {} items".format(CustomerClass._intTotalItemsRented)
-	
-	# def __repr__(self):
-	# 	strRepr = ("Name: {}, ID: {}, \n# of Skis rented: {}, # of Snowboards rented: {}," 
-	# 	"\n# of hours: {}, # of days: {}, # of weeks: {},"
-	#     "\nCoupon code: {}".format(self.strName, self.intID, self.intSkisRented, 
-	# 	self.intSnowboardsRented, self.intRentalHours, self.intRentalDays, self.intRentalWeeks, self.strCouponCode))
-	# 	return strRepr
  
 	def __repr__(self):
 		strRepr = ("Name: {} \nID: {} \nRental Duration: {}, {}\n# of Skis rented: {} \n# of Snowboards rented: {}" 
@@ -53,7 +46,6 @@ class CustomerClass(object):
 		else:
 			self._strName = ""
 			raise Exception("The Name has to have letters. The value of Name was: {}".format(strInput))
-
 	
 	@property
 	def intID(self):
