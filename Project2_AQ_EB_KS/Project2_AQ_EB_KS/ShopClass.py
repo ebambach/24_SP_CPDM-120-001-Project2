@@ -32,11 +32,17 @@ class ShopClass(object):
     _intFullPriceSkis = int()
     _intDiscountedSnowboards = int()
     _intFullPriceSnowboards = int()
+    # The number of skis requested
+    intSkisRequested = int()
+    # The number of snowboards requested
+    intSnowboardsRequested = int()
+    # The time basis of the potential rental
+    strRentalBasis = str()
+    # Th amount of time for the potential rental
+    intTimeRequested = int()
+
     # Boolean for checking availbility
     _blnValidation = False
-
-
-    intRentalTime = int(0)
 
 
     # Set the initial quantity of Skis and Snowboards, each with a default amount of 0
