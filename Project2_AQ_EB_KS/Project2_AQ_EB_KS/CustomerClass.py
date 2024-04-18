@@ -8,7 +8,9 @@
 # ------------------------------------------------------------------
 class CustomerClass(object):
 	_intTotalItemsRented = int(0)
+	_intOrderItemsRented = int(0)
 	_dblDiscount = float(0)
+
 # ------------------------------------------------------------------
 # CustomerClass constructor
 # ------------------------------------------------------------------	
@@ -20,8 +22,6 @@ class CustomerClass(object):
 		self.intSkisRented = intSkisRented
 		self.intSnowboardsRented = intSnowboardsRented
 		self.strCouponCode = strCouponCode
-
-		CustomerClass._intTotalItemsRented = self.intSkisRented + self.intSnowboardsRented
 
 	def __str__(self):
 		return "The Customer is renting {} items".format(CustomerClass._intTotalItemsRented)
@@ -88,7 +88,6 @@ class CustomerClass(object):
 		else:
 			raise Exception("Snowboards Rented must be an integer equal to or greater than 0. The value of Snowboards Rented was: {}".format(intInput))
 
-
 	@property
 	def intRentalTime(self):
 		return self._intRentalTime
@@ -108,11 +107,11 @@ class CustomerClass(object):
 		return self._strRentalBasis
 
 	@strRentalBasis.setter
-	def strRentalBasis(self, intInput):
-		if (intInput == "Hourly") or (intInput == "Daily") or (intInput == "Weekly"):
-			self._strRentalBasis = intInput
+	def strRentalBasis(self, strInput):
+		if (strInput == "Hourly") or (strInput == "Daily") or (strInput == "Weekly"):
+			self._strRentalBasis = strInput
 		else:
-			raise Exception("The rental basis must be Hourly, Daily, or Weekly. The rental basis entered was: {}".format(intInput))
+			raise Exception("The rental basis must be Hourly, Daily, or Weekly. The rental basis entered was: {}".format(strInput))
 			self._strRentalBasis = ""
 
 	@property
@@ -126,72 +125,3 @@ class CustomerClass(object):
 		else:
 			self._strCouponCode = ""
 			raise Exception("The coupon code has to have letters. The value of strCouponCode was: {}".format(strInput))
-		
-		def __init__(self, intSkisRented, intSnowboardsRented, strRentalBasis, intRentalTime, bill):
-			"""
-			Our constructor method which instantiates various customer objects.
-			"""
-		
-			self.intSkisRented = 0
-			self.intSnowboardsRented = 0
-			self.strRentalBasis = 0
-			self.intRentalTime = 0
-			self.bill = 0
-   
-		def requestSkis(self, intSkisRented):
-			"""
-			Takes a request from the customer for the number of Skis.
-			"""
-                     
-			intSkisRented = input("How many skis would you like to rent?")
-       
-			# implement logic for invalid input
-			try:
-				intSkisRented = int(intSkisRented)
-			except ValueError:
-				print("That's not a positive integer!")
-				return -1
-			if intSkisRented < 1:
-				print("Invalid input. Number of skis should be greater than zero!")
-				return -1
-			else:
-				self.intSkisRented = intSkisRented
-			return self.intSkisRented
-
-		def requestSnowBoards(self, intSnowboardsRented):
-			"""
-			Takes a request from the customer for the number of bikes.
-			"""
-                     
-			intSnowboardsRented = input("How many SnowBoards would you like to rent?")
-       
-			# implement logic for invalid input
-			try:
-				intSnowboardsRented = int(intSnowboardsRented)
-			except ValueError:
-				print("That's not a positive integer!")
-				return -1
-			if intSnowboardsRented < 1:
-				print("Invalid input. Number of SnowBoards should be greater than zero!")
-				return -1
-			else:
-				self.intSnowboardsRented = intSnowboardsRented
-			return self.intSnowboardsRented
-     
-		def returnSkis(self):
-			"""
-			Allows customers to return their Skis to the rental shop.
-			"""
-			if self.strRentalBasis and self.rentalTime and self.intSkisRented:
-				return self.intRentalTime, self.intRentalTime, self.intSkisRented  
-			else:
-				return 0,0,0
-		
-		def returnSnowBoards(self, intSnowboardsRented):
-			"""
-			Allows customers to return their SnowBoards to the rental shop.
-			"""
-			if self.strRentalBasis and self.intRentalTime and self.intSnowboardsRented:
-				return self.intRentalTime, self.strRentalBasis, self.intSnowboardsRented  
-			else:
-				return 0,0,0
