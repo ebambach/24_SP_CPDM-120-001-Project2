@@ -24,10 +24,17 @@ class ShopClass(object):
     _dblSnowboardsDaily = float(40)
     _dblSnowboardsWeekly = float(160)
     # Rental price
-    _dblRentalPrice = float(0)
+    _dblSkisSubtotal = float(0)
+    _dblSnowboardsSubtotal = float(0)
     _dblEstimateRentalPrice = float(0)
+    # Which items are discounted and full price
+    _intDiscountedSkis = int()
+    _intFullPriceSkis = int()
+    _intDiscountedSnowboards = int()
+    _intFullPriceSnowboards = int()
     # Boolean for checking availbility
     _blnValidation = False
+
 
     intRentalTime = int(0)
 
@@ -258,27 +265,65 @@ class ShopClass(object):
         self.intSkisRented = intSkisRented
         self.intSnowboardsRented = intSnowboardsRented
 
-        _intOrderItemsRented = self.intSkisRented + self.intSnowboardsRented
+        _dblFamilylDiscount = 25
+        _intItemsRented = self.intSkisRented + self.intSnowboardsRented
 
-        if _intOrderItemsRented >= 3:
-            print("You are eligible for a family rental promotion of 25% discount for up to five items on one order.")
-            _dblFamilyDiscount = 25
+        # Determining the which items get a discount
+        # Is this math mathing???
+        #   The discount for one discounted ski per hour is 3.75, the discount for one discounted snowboard per hour is 2.5
+        #   The discount for one discounted ski per day is 12.5, the discount for one discounted snowboard per day is 10
+        #   The discount for one discounted ski per week is 50, the discount for one discounte snowboard per week is 40
+        #   Therefore, because we want to give the best price, we should discount as many skis as possible before discounting any snowboards
+        # That's what this is based on:
+        if _intItemsRented < 3:
+            _intFullPriceSkis = intSkisRented
+            _intFullPriceSnowboards = intSnowboardsRented
+            _intDiscountedSkis = 0
+            _intDiscountedSnowboards = 0
+        else:
+            if _intItemsRented < 6:
+                _intFullPriceSkis = 0
+                _intFullPriceSnowboards = 0
+                _intDiscountedSkis = intSkisRented
+                _intDiscountedSnowboards = intSnowboardsRented
+            else:
+                if intSkisRented >= 5:
+                    _intDiscountedSkis = 5
+                    _intFullPriceSkis = intSkisRented - 5
+                    _intDiscountedSnowboards = 0
+                    _intFullPriceSnowboards = intSnowboardsRented
+                else:
+                    _intDiscountedSkis = intSkisRented
+                    _intFullPriceSkis = 0
+                    _intDiscountedSnowboards = 5 - intSkisRented
+                    _intFullPriceSnowboards = intSnowboardsRented - _intDiscountedSnowboards
+        print("Total Items Rented: ", _intItemsRented)
+        print("Full Price Skis: ", _intFullPriceSkis)
+        print("25% Discounted Skis: ", _intDiscountedSkis)
+        print("Full Price Snowboards: ", _intFullPriceSnowboards)
+        print("25% Discounted Snowboards: ",_intDiscountedSnowboards)
 
     # Applying discount based on the coupon code
     def getCouponDiscount(self):
         if strCouponCode.endswith("BBP"):
-            print("Coupon code applied. You received a 10% discount.")
+            print("Coupon Discount: 10%")
             _dblCouponDiscount = 10
 
 # ------------------------------------------------------------------
 # Method for Calculating Estimate Rental Price (Best Price)
 # ------------------------------------------------------------------
-    def calc_estimatebestrentalprice(self, intRentalTime = 0, strRentalBasis = "Hourly", intSkisRented = 0, intSnowboardsRented = 0, _dblFamilyDiscount = 0, _dblCouponDiscount = 0):
+    def calcEstimateBestRentalPrice(self, intRentalTime = 0, strRentalBasis = "Hourly", intSkisRented = 0, intSnowboardsRented = 0, _intFullPriceSkis = 0, _intDiscountedSkis = 0, _intFullPriceSnowboards = 0, _intDiscountedSnowboards = 0, _dblFamilyDiscount = 0, _dblCouponDiscount = 0):
         # Rental basis is either Hourly, Daily, or Weekly
         self.strRentalBasis = strRentalBasis
         self.intRentalTime = intRentalTime
         self.intSkisRented = intSkisRented
         self.intSnowboardsRented = intSnowboardsRented
+        self.getFamilyDiscount(self.intSkisRented, self.intSnowboardsRented)
+
+        # I don't know how to pass variables and what to put in the signature :')
+        # This could probably be a loop but I am incapable of doing that rn :')
+        # It's ugly but it works, maybe
+        # We probably should have had separate methods for each RentalBasis
 
         if strRentalBasis == "Hourly":
             if intRentalTime * (self._dblSkisHourly + self._dblSnowboardsHourly) > self._dblSkisWeekly + self._dblSnowboardsWeekly:
@@ -289,7 +334,12 @@ class ShopClass(object):
                 if self.intSnowboardsRented > 0:
                     self.rentSnowboardsWeekly(self.intSnowboardsRented)
                 intRentalTime = math.ceil(intRentalTime  / 168)
-                _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisWeekly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsWeekly)) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))
+                # Calculate for subtotal weekly price of discounted skis + price of non-discounted skis
+                _dblSkisSubtotal = ((_intDiscountedSkis * intRentalTime * self._dblSkisWeekly) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSkis * intRentalTime * self._dblSkisWeekly)
+                # Calculate for subtotal weekly price of discounted snowboards + price of non-discounted snowboards
+                _dblSnowboardsSubtotal = ((_intDiscountedSnowboards * intRentalTime * self._dblSnowboardsWeekly) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSnowboards * intRentalTime * self._dblSnowboardsWeekly)
+                # Calculate for Estimated RentalPrice by adding the Skis Subtotal and Snowboards Subtotal
+                _dblEstimateRentalPrice = _dblSkisSubtotal + _dblSnowboardsSubtotal
             else:
                 if intRentalTime * (self._dblSkisHourly + self._dblSnowboardsHourly) > self._dblSkisDaily + self._dblSnowboardsDaily:
                     # Daily was determined to be cheaper than Hourly, charge the Daily rate  
@@ -299,14 +349,24 @@ class ShopClass(object):
                     if self.intSnowboardsRented > 0:
                         self.rentSnowboardsDaily(self.intSnowboardsRented)
                     intRentalTime = math.ceil(intRentalTime / 24)
-                    _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisDaily) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsDaily)) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))
+                    # Calculate for subtotal daily price of discounted skis + price of non-discounted skis
+                    _dblSkisSubtotal = ((_intDiscountedSkis * intRentalTime * self._dblSkisDaily) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSkis * intRentalTime * self._dblSkisDaily)
+                    # Calculate for subtotal daily price of discounted snowboards + price of non-discounted snowboards
+                    _dblSnowboardsSubtotal = ((_intDiscountedSnowboards * intRentalTime * self._dblSnowboardsDaily) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSnowboards * intRentalTime * self._dblSnowboardsDaily)
+                    # Calculate for Estimated RentalPrice by adding the Skis Subtotal and Snowboards Subtotal
+                    _dblEstimateRentalPrice = _dblSkisSubtotal + _dblSnowboardsSubtotal
                 else:
                     # Charge the Hourly rate
                     if self.intSkisRented > 0:
                         self.rentSkisHourly(self.intSkisRented)
                     if self.intSnowboardsRented > 0:
                         self.rentSnowboardsHourly(self.intSnowboardsRented)
-                    _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisHourly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsHourly)) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))
+                    # Calculate for subtotal hourly price of discounted skis + price of non-discounted skis
+                    _dblSkisSubtotal = ((_intDiscountedSkis * intRentalTime * self._dblSkisHourly) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSkis * intRentalTime * self._dblSkisHourly)
+                    # Calculate for subtotal hourly price of discounted snowboards + price of non-discounted snowboards
+                    _dblSnowboardsSubtotal = ((_intDiscountedSnowboards * intRentalTime * self._dblSnowboardsHourly) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSnowboards * intRentalTime * self._dblSnowboardsHourly)
+                    # Calculate for Estimated RentalPrice by adding the Skis Subtotal and Snowboards Subtotal
+                    _dblEstimateRentalPrice = _dblSkisSubtotal + _dblSnowboardsSubtotal
         else:
             if strRentalBasis == "Daily":
                 if intRentalTime * (self._dblSkisDaily * self._dblSnowboardsDaily) > self._dblSkisWeekly + self._dblSnowboardsWeekly:
@@ -317,7 +377,12 @@ class ShopClass(object):
                     if self.intSnowboardsRented > 0:
                         self.rentSnowboardsWeekly(self.intSnowboardsRented)
                     intRentalTime = math.ceil(intRentalTime  / 168)
-                    _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisWeekly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsWeekly)) * (1 - ((_dblFamilyDiscount + _dblCoupon) / 100))
+                    # Calculate for Subtotal weekly price of discounted skis + price of non-discounted skis
+                    _dblSkisSubtotal = ((_intDiscountedSkis * intRentalTime * self._dblSkisWeekly) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSkis * intRentalTime * self._dblSkisWeekly)
+                    # Calculate for Subtotal weekly price of discounted snowboards + price of non-discounted snowboards
+                    _dblSnowboardsSubtotal = ((_intDiscountedSnowboards * intRentalTime * self._dblSnowboardsWeekly) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSnowboards * intRentalTime * self._dblSnowboardsWeekly)
+                    # Calculate for Estimated RentalPrice by adding the Skis Subtotal and Snowboards Subtotal
+                    _dblEstimateRentalPrice = _dblSkisSubtotal + _dblSnowboardsSubtotal
                 else:
                     # charge the Daily rate
                     if self.intSkisRented > 0:
@@ -325,17 +390,85 @@ class ShopClass(object):
                     if self.intSnowboardsRented > 0:
                         self.rentSnowboardsDaily(self.intSnowboardsRented)
                     intRentalTime = math.ceil(intRentalTime / 24)
-                    _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisDaily) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsDaily)) * (1 - ((_dblFamilyDiscount + _dblCoupon) / 100))
+                    # Calculate for Subtotal daily price of discounted skis + price of non-discounted skis
+                    _dblSkisSubtotal = ((_intDiscountedSkis * intRentalTime * self._dblSkisDaily) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSkis * intRentalTime * self._dblSkisDaily)
+                    # Calculate for Subtotal daily price of discounted snowboards + price of non-discounted snowboards
+                    _dblSnowboardsSubtotal = ((_intDiscountedSnowboards * intRentalTime * self._dblSnowboardsDaily) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSnowboards * intRentalTime * self._dblSnowboardsDaily)
+                    # Calculate for Estimated RentalPrice by adding the Skis Subtotal and Snowboards Subtotal
+                    _dblEstimateRentalPrice = _dblSkisSubtotal + _dblSnowboardsSubtotal
             else:
                 # Charge the Weekly rate
                 if self.intSkisRented > 0:
                     self.rentSkisWeekly(self.intSkisRented)
                 if self.intSnowboardsRented > 0:
                     self.rentSnowboardsWeekly(self.intSnowboardsRented)
-                intRentalTime = math.ceil(intRentalTime  / 168)  
-                _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisWeekly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsWeekly)) * (1 - ((_dblFamilyDiscount + _dblCoupon) / 100))
+                intRentalTime = math.ceil(intRentalTime / 168)  
+                # Calculate for Subtotal weekly price of discounted skis + price of non-discounted skis
+                _dblSkisSubtotal = ((_intDiscountedSkis * intRentalTime * self._dblSkisWeekly) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSkis * intRentalTime * self._dblSkisWeekly)
+                # Calculate for Subtotal weekly price of discounted snowboards + price of non-discounted snowboards
+                _dblSnowboardsSubtotal = ((_intDiscountedSnowboards * intRentalTime * self._dblSnowboardsWeekly) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))) + (_intFullPriceSnowboards * intRentalTime * self._dblSnowboardsWeekly)
+                # Calculate for Estimated RentalPrice by adding the Skis Subtotal and Snowboards Subtotal
+                _dblEstimateRentalPrice = _dblSkisSubtotal + _dblSnowboardsSubtotal 
+                
         print("The Estimated Rental Price is: ", _dblEstimateRentalPrice)
         return _dblEstimateRentalPrice
+
+        #if strRentalBasis == "Hourly":
+        #    if intRentalTime * (self._dblSkisHourly + self._dblSnowboardsHourly) > self._dblSkisWeekly + self._dblSnowboardsWeekly:
+        #        # Weekly was determined to be cheaper than Hourly, charge the Weekly rate  
+        #        strRentalBasis = "Weekly"
+        #        if self.intSkisRented > 0:
+        #            self.rentSkisWeekly(self.intSkisRented)
+        #        if self.intSnowboardsRented > 0:
+        #            self.rentSnowboardsWeekly(self.intSnowboardsRented)
+        #        intRentalTime = math.ceil(intRentalTime  / 168)
+        #        _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisWeekly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsWeekly)) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))
+        #    else:
+        #        if intRentalTime * (self._dblSkisHourly + self._dblSnowboardsHourly) > self._dblSkisDaily + self._dblSnowboardsDaily:
+        #            # Daily was determined to be cheaper than Hourly, charge the Daily rate  
+        #            strRentalBasis = "Daily"
+        #            if self.intSkisRented > 0:
+        #                self.rentSkisDaily(self.intSkisRented)
+        #            if self.intSnowboardsRented > 0:
+        #                self.rentSnowboardsDaily(self.intSnowboardsRented)
+        #            intRentalTime = math.ceil(intRentalTime / 24)
+        #            _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisDaily) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsDaily)) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))
+        #        else:
+        #            # Charge the Hourly rate
+        #            if self.intSkisRented > 0:
+        #                self.rentSkisHourly(self.intSkisRented)
+        #            if self.intSnowboardsRented > 0:
+        #                self.rentSnowboardsHourly(self.intSnowboardsRented)
+        #            _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisHourly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsHourly)) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))
+        #else:
+        #    if strRentalBasis == "Daily":
+        #        if intRentalTime * (self._dblSkisDaily * self._dblSnowboardsDaily) > self._dblSkisWeekly + self._dblSnowboardsWeekly:
+        #            # Weekly was determined to be cheaper than Daily, charge the Weekly rate
+        #            strRentalBasis = "Weekly"
+        #            if self.intSkisRented > 0:
+        #                self.rentSkisWeekly(self.intSkisRented)
+        #            if self.intSnowboardsRented > 0:
+        #                self.rentSnowboardsWeekly(self.intSnowboardsRented)
+        #            intRentalTime = math.ceil(intRentalTime  / 168)
+        #            _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisWeekly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsWeekly)) * (1 - ((_dblFamilyDiscount + _dblCoupon) / 100))
+        #        else:
+        #            # charge the Daily rate
+        #            if self.intSkisRented > 0:
+        #                self.rentSkisDaily(self.intSkisRented)
+        #            if self.intSnowboardsRented > 0:
+        #                self.rentSnowboardsDaily(self.intSnowboardsRented)
+        #            intRentalTime = math.ceil(intRentalTime / 24)
+        #            _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisDaily) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsDaily)) * (1 - ((_dblFamilyDiscount + _dblCoupon) / 100))
+        #    else:
+        #        # Charge the Weekly rate
+        #        if self.intSkisRented > 0:
+        #            self.rentSkisWeekly(self.intSkisRented)
+        #        if self.intSnowboardsRented > 0:
+        #            self.rentSnowboardsWeekly(self.intSnowboardsRented)
+        #        intRentalTime = math.ceil(intRentalTime  / 168)  
+        #        _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisWeekly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsWeekly)) * (1 - ((_dblFamilyDiscount + _dblCoupon) / 100))
+        #print("The Estimated Rental Price is: ", _dblEstimateRentalPrice)
+        #return _dblEstimateRentalPrice
 
 
 

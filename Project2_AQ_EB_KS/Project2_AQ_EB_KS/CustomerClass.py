@@ -8,7 +8,9 @@
 # ------------------------------------------------------------------
 class CustomerClass(object):
 	_intTotalItemsRented = int(0)
+	_intOrderItemsRented = int(0)
 	_dblDiscount = float(0)
+
 # ------------------------------------------------------------------
 # CustomerClass constructor
 # ------------------------------------------------------------------	
@@ -20,8 +22,6 @@ class CustomerClass(object):
 		self.intSkisRented = intSkisRented
 		self.intSnowboardsRented = intSnowboardsRented
 		self.strCouponCode = strCouponCode
-
-		CustomerClass._intTotalItemsRented = self.intSkisRented + self.intSnowboardsRented
 
 	def __str__(self):
 		return "The Customer is renting {} items".format(CustomerClass._intTotalItemsRented)
@@ -88,7 +88,6 @@ class CustomerClass(object):
 		else:
 			raise Exception("Snowboards Rented must be an integer equal to or greater than 0. The value of Snowboards Rented was: {}".format(intInput))
 
-
 	@property
 	def intRentalTime(self):
 		return self._intRentalTime
@@ -108,11 +107,11 @@ class CustomerClass(object):
 		return self._strRentalBasis
 
 	@strRentalBasis.setter
-	def strRentalBasis(self, intInput):
-		if (intInput == "Hourly") or (intInput == "Daily") or (intInput == "Weekly"):
-			self._strRentalBasis = intInput
+	def strRentalBasis(self, strInput):
+		if (strInput == "Hourly") or (strInput == "Daily") or (strInput == "Weekly"):
+			self._strRentalBasis = strInput
 		else:
-			raise Exception("The rental basis must be Hourly, Daily, or Weekly. The rental basis entered was: {}".format(intInput))
+			raise Exception("The rental basis must be Hourly, Daily, or Weekly. The rental basis entered was: {}".format(strInput))
 			self._strRentalBasis = ""
 
 	@property
@@ -127,8 +126,3 @@ class CustomerClass(object):
 			self._strCouponCode = ""
 			raise Exception("The coupon code has to have letters. The value of strCouponCode was: {}".format(strInput))
 		
-# Testing
-
-Test = CustomerClass("Ana", 123, 8, "Hourly", 2, 2.2)
-print(Test)
-print(repr(Test))
