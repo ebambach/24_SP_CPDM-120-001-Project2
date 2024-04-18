@@ -261,6 +261,21 @@ class ShopClass(object):
             self.intCurrentSnowboardsInventory -= intRequestedSnowboards
             self._blnValidation = False
 
+	
+# ------------------------------------------------------------------
+# Method to return Skis to inventory
+# ------------------------------------------------------------------
+    def returnSkis(self, intReturnedSkis):
+        self.intCurrentSkisInventory += intReturnedSkis
+
+
+# ------------------------------------------------------------------
+# Method to return Snowboards to inventory
+# ------------------------------------------------------------------
+    def returnSnowboards(self, intReturnedSnowboards):
+        self.intCurrentSnowboardsInventory += intReturnedSnowboards
+
+
 
 # ------------------------------------------------------------------
 # Discount Coupons for Total Items Rented 

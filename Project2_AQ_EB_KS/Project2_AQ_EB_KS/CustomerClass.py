@@ -125,4 +125,3 @@ class CustomerClass(object):
 		else:
 			self._strCouponCode = ""
 			raise Exception("The coupon code has to have letters. The value of strCouponCode was: {}".format(strInput))
-		
