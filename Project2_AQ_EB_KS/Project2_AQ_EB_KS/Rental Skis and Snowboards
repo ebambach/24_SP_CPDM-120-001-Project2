@@ -1,0 +1,34 @@
+# Ski Rental Shop Application 
+
+## Introduction
+This guide provides step-by-step instructions for application programmers on how to implement and use the classes designed for the ski rental shop application.
+
+# Class Overview
+
+### Customer Class
+- **Purpose**: Stores and manages customer information and rental history.
+- **Attributes**:  strName, intID, intSkisRented, intSnowboardsRented, intTotalItemsRented, intRentalHours, intRentalDays, intRentalWeeks, dblSkisHourly, dblSkisDaily, dblSkisWeekly, dblSnowboardsHourly, dblSnowboardsDaily, dblSnowboardsWeekly, dblRentalPrice, strCouponCode, dblDiscount
+
+### Shop Class
+- **Purpose**: Manages the overall operations of the ski rental shop.
+- **Attributes**: intInitialSkisInventory, intInitialSnowboardsInventory, intSkiAvailable, intSnowboardAvailable, dblEstimateRentalPrice, dblActualRentalPrice, intDailySkis, intDailySnowboards, dblDailyRevenue
+
+## Step 1: Managing Customer Information
+1. Instantiate the `Customer` class when a new customer arrives.
+2. Record the customer's name and ID number using the class's attributes.
+
+## Step 2: Shop Operations
+1. Instantiate the `Shop` class to manage inventory and transactions.
+2. Use the `Inventory ` method to process new rentals, checking against the inventory.
+3. Apply any discounts or promotions with the `apply discount` method.
+
+## Step 3: Finalizing Rentals
+1. When equipment is returned, use the ` Inventory ` method to update the inventory and rental history.
+2. Calculate the final bill, including any additional charges or discounts.
+
+## Step 4: Daily Reporting
+1. At the end of the day, use the  ‘ ActualRentalPrice ’ , ‘ DailyRevenue ‘ method to tally the total rentals and revenue.
+2. The report should include details such as the number of skis and snowboards rented, total revenue, and any outstanding rentals.
+
+## Conclusion 
+In conclusion, the ski rental shop application is designed to streamline the process of renting skis and snowboards, ensuring a seamless experience for both customers and the shop’s staff. Customers can easily view available equipment, provide their details, and choose a rental plan that suits their needs, taking advantage of hourly, daily, or weekly rates, as well as family discounts and promotional offers. The shop can manage its inventory, issue accurate estimates and bills, and keep track of daily rentals and revenue. By following the step-by-step guide provided, application programmers can implement the system efficiently, ensuring that all functionalities work together harmoniously to provide a reliable and user-friendly service. This system not only simplifies the rental process but also helps the shop maintain a clear record of transactions, ultimately leading to better customer satisfaction and business management.
