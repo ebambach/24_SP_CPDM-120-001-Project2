@@ -318,13 +318,10 @@ class ShopClass(object):
 # ------------------------------------------------------------------
 # Method for Calculating Estimate Rental Price (Best Price)
 # ------------------------------------------------------------------
-    def calcEstimateBestRentalPrice(self, intRentalTime = 0, strRentalBasis = "Hourly", intSkisRented = 0, intSnowboardsRented = 0, _intFullPriceSkis = 0, _intDiscountedSkis = 0, _intFullPriceSnowboards = 0, _intDiscountedSnowboards = 0, _dblFamilyDiscount = 0, _dblCouponDiscount = 0):
+    def calcEstimateBestRentalPrice(self, intRentalTime = 0, strRentalBasis = "Hourly", _intFullPriceSkis = 0, _intDiscountedSkis = 0, _intFullPriceSnowboards = 0, _intDiscountedSnowboards = 0, _dblFamilyDiscount = 0, _dblCouponDiscount = 0):
         # Rental basis is either Hourly, Daily, or Weekly
         self.strRentalBasis = strRentalBasis
-        self.intRentalTime = intRentalTime
-        self.intSkisRented = intSkisRented
         self.intSnowboardsRented = intSnowboardsRented
-        self.getFamilyDiscount(self.intSkisRented, self.intSnowboardsRented)
 
         # I don't know how to pass variables and what to put in the signature :')
         # This could probably be a loop but I am incapable of doing that rn :')
