@@ -127,7 +127,7 @@ class ShopClass(object):
                         self.getCouponDiscount(strCouponCode)
                         # Provide an estimate of the best price based on how much time
                         # is requested, and the basis of said time ("Hourly," "Daily," or "Weekly")
-                        self.calcEstimateBestRentalPrice(intTimeRequested, strRentalBasis, self._intFullPriceSkis, self._intDiscountedSkis, 
+                        self.calcEstimateBestRentalPrice(self.intTimeRequested, strRentalBasis, self._intFullPriceSkis, self._intDiscountedSkis, 
                                           self._intFullPriceSnowboards, self._intDiscountedSnowboards)
                         self.confirmRental()
 
@@ -139,7 +139,7 @@ class ShopClass(object):
     def intTimeRequested(self, intInput):
         if intInput == int(intInput):
             if intInput > 0:
-                self._intSkisRequested = intInput
+                self.intTimeRequested = intInput
                 self._blnValidation = True
             else:
                 self._blnValidation = False
@@ -560,8 +560,8 @@ class ShopClass(object):
         strInput = str(input("Enter 1 for Yes, or 2 for No: "))
         if strInput == "1":
             strCustomerName = str(input("Please enter a name for the rental: "))
-            strID = str(input("Please your phone number: "))
-            CustomerList.append(Customer(strCustomerName, strID, self.rentalTime, self.strRentalBasis, 
+            intID = int(input("Please your phone number: "))
+            self.CustomerList.append(Customer.CustomerClass(strCustomerName, intID, self.intTimeRequested, self.strRentalBasis, 
                                          self.intSkisRented, self.intSnowboardsRented, 
                                          self.strCouponCode, datetime.datetime.now()))
 
