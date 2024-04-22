@@ -13,20 +13,26 @@ import ShopClass as Shop
 
 # try:
 	# Testing Area
-test1 = Shop.ShopClass(100,100)  
+	test1 = Shop.ShopClass(100,100)  
 
-test1.calcEstimateBestRentalPrice(1, "Hourly", 4, 7, 0, 4, 6, 1, 25, 0)
-#test1.calc_estimatebestrentalprice(8, "Hourly", 2, 2, 10, 10)
-## test0 = Customer.CustomerClass("Crystal Clear", 1, 1, 0, 1, 0, 0, "")
-## print(repr(test1))
-
-
-## except Exception as e:
-#	# print(e)
-=======
+	test1.calcEstimateBestRentalPrice(1, "Hourly", 4, 7, 0, 4, 6, 1, 25, 0)
+	#test1.calc_estimatebestrentalprice(8, "Hourly", 2, 2, 10, 10)
+	# print(repr(test1))
+	# test0 = Customer.CustomerClass("Crystal Clear", 1, 1, 0, 1, 0, 0, "")
 	#print(repr(test0))
 
-	test1.calc_estimatebestrentalprice(10, "Hourly", 1, 0, 0)
+	# test cases for the family discount, which applies when there are at three
+	# items on the order, discounting up to five items on the order
+	# the method discounts skis over snowboards, when available, as skis
+	# cost more to rent
+	#test1.getFamilyDiscount(2, 0)
+	#test1.getFamilyDiscount(0, 2)
+	#test1.getFamilyDiscount(2, 1)
+	#test1.getFamilyDiscount(1, 2)
+	#test1.getFamilyDiscount(4, 0)
+	#test1.getFamilyDiscount(0, 4)
+	#test1.getFamilyDiscount(5, 2)
+	#test1.getFamilyDiscount(2, 5)
 except Exception as e:
 	print(e)
 	
