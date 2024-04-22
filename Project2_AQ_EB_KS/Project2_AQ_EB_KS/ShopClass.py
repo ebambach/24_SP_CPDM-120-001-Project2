@@ -50,6 +50,8 @@ class ShopClass(object):
     strCouponCode = str()
     # If strCouponCode ends with "BBP," this variable is set to 10 to give 10% off
     _dblCouponDiscount = float()
+    # List of Customers
+    CustomerList = []
 
     # Boolean for checking availbility
     _blnValidation = False
@@ -127,6 +129,7 @@ class ShopClass(object):
                         # is requested, and the basis of said time ("Hourly," "Daily," or "Weekly")
                         self.calcEstimateBestRentalPrice(intTimeRequested, strRentalBasis, self._intFullPriceSkis, self._intDiscountedSkis, 
                                           self._intFullPriceSnowboards, self._intDiscountedSnowboards)
+                        self.confirmRental()
 
 
 
@@ -546,6 +549,21 @@ class ShopClass(object):
                 
         print("The Estimated Rental Price is: ", self._dblEstimateRentalPrice)
         return self._dblEstimateRentalPrice
+
+
+
+# ------------------------------------------------------------------
+# Method to confirm rental
+# ------------------------------------------------------------------
+    def confirmRental(self):
+        print("Confirm rental?")
+        strInput = str(input("Enter 1 for Yes, or 2 for No: "))
+        if strInput == "1":
+            strCustomerName = str(input("Please enter a name for the rental: "))
+            strID = str(input("Please your phone number: "))
+            CustomerList.append(Customer(strCustomerName, strID, self.rentalTime, self.strRentalBasis, 
+                                         self.intSkisRented, self.intSnowboardsRented, 
+                                         self.strCouponCode, datetime.datetime.now()))
 
 
 
