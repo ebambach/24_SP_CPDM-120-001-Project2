@@ -14,7 +14,7 @@ class CustomerClass(object):
 # ------------------------------------------------------------------
 # CustomerClass constructor
 # ------------------------------------------------------------------	
-	def __init__(self, strName, intID, intRentalTime, strRentalBasis, intSkisRented = 0, intSnowboardsRented = 0, intRentalWeeks = 0, strCouponCode = ""):
+	def __init__(self, strName, intID, intRentalTime, strRentalBasis, intSkisRented = 0, intSnowboardsRented = 0, strCouponCode = "", dtmRentalStart = 0):
 		self.strName = strName
 		self.intID = intID
 		self.intRentalTime = intRentalTime
@@ -22,10 +22,11 @@ class CustomerClass(object):
 		self.intSkisRented = intSkisRented
 		self.intSnowboardsRented = intSnowboardsRented
 		self.strCouponCode = strCouponCode
+		self.dtmRentalStart = dtmRentalStart
 
 	def __str__(self):
 		return "The Customer is renting {} items".format(CustomerClass._intTotalItemsRented)
- 
+
 	def __repr__(self):
 		strRepr = ("Name: {} \nID: {} \nRental Duration: {}, {}\n# of Skis rented: {} \n# of Snowboards rented: {}" 
 	    "\nCoupon code: {}".format(self.strName, self.intID, self.intRentalTime, self.strRentalBasis, self.intSkisRented, 
