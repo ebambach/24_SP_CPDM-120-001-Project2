@@ -35,11 +35,61 @@ import ShopClass as Shop
 	#test1.getFamilyDiscount(2, 5)
 except Exception as e:
 	print(e)
-	
-	
-input()
 
 
+shop = ShopClass()
+shop.getFamilyDiscount(2, 1)  # 2 Skis, 1 Snowboard
+
+shop = ShopClass()
+shop.getFamilyDiscount(4, 1)  # 4 Skis, 1 Snowboard
+
+shop = ShopClass()
+shop.getFamilyDiscount(2, 5)  # 2 Skis, 5 Snowboards
+
+'Hourly Rental Basis - Skis Only: Test a scenario where only skis are rented on an hourly basis.
+
+shop = ShopClass()
+shop.calcEstimateBestRentalPrice(intRentalTime=3, strRentalBasis="Hourly", _intFullPriceSkis=3, _intDiscountedSkis=0, _intFullPriceSnowboards=0, _intDiscountedSnowboards=0, _dblFamilyDiscount=0, _dblCouponDiscount=0)
+
+'Hourly Rental Basis - Snowboards Only: Test a scenario where only snowboards are rented on an hourly basis.
+
+shop = ShopClass()
+shop.calcEstimateBestRentalPrice(intRentalTime=4, strRentalBasis="Hourly", _intFullPriceSkis=0, _intDiscountedSkis=0, _intFullPriceSnowboards=4, _intDiscountedSnowboards=0, _dblFamilyDiscount=0, _dblCouponDiscount=0)
+
+'Daily Rental Basis - Skis Only: Test a scenario where only skis are rented on a daily basis.
+
+shop = ShopClass()
+shop.calcEstimateBestRentalPrice(intRentalTime=2, strRentalBasis="Daily", _intFullPriceSkis=2, _intDiscountedSkis=0, _intFullPriceSnowboards=0, _intDiscountedSnowboards=0, _dblFamilyDiscount=0, _dblCouponDiscount=0)
+
+'Daily Rental Basis - Snowboards Only: Test a scenario where only snowboards are rented on a daily basis.
+
+shop = ShopClass()
+shop.calcEstimateBestRentalPrice(intRentalTime=3, strRentalBasis="Daily", _intFullPriceSkis=0, _intDiscountedSkis=0, _intFullPriceSnowboards=3, _intDiscountedSnowboards=0, _dblFamilyDiscount=0, _dblCouponDiscount=0)
+
+'Weekly Rental Basis - Skis Only: Test a scenario where only skis are rented on a weekly basis.
+
+shop = ShopClass()
+shop.calcEstimateBestRentalPrice(intRentalTime=1, strRentalBasis="Weekly", _intFullPriceSkis=1, _intDiscountedSkis=0, _intFullPriceSnowboards=0, _intDiscountedSnowboards=0, _dblFamilyDiscount=0, _dblCouponDiscount=0)
+
+'Weekly Rental Basis - Snowboards Only: Test a scenario where only snowboards are rented on a weekly basis.
+
+shop = ShopClass()
+shop.calcEstimateBestRentalPrice(intRentalTime=2, strRentalBasis="Weekly", _intFullPriceSkis=0, _intDiscountedSkis=0, _intFullPriceSnowboards=2, _intDiscountedSnowboards=0, _dblFamilyDiscount=0, _dblCouponDiscount=0)
+
+'Mixed Rental Basis - Skis and Snowboards: Test a scenario where both skis and snowboards are rented on different rental bases.
+
+shop = ShopClass()
+shop.calcEstimateBestRentalPrice(intRentalTime=5, strRentalBasis="Hourly", _intFullPriceSkis=2, _intDiscountedSkis=1, _intFullPriceSnowboards=3, _intDiscountedSnowboards=1, _dblFamilyDiscount=0, _dblCouponDiscount=0)
+
+'With Family Discount Applied: Test a scenario where a family discount is applied.
+
+shop = ShopClass()
+shop.calcEstimateBestRentalPrice(intRentalTime=3, strRentalBasis="Daily", _intFullPriceSkis=3, _intDiscountedSkis=2, _intFullPriceSnowboards=0, _intDiscountedSnowboards=0, _dblFamilyDiscount=25, _dblCouponDiscount=0)
+
+'With Coupon Discount Applied: Test a scenario where a coupon discount is applied.
+
+shop = ShopClass()
+shop.calcEstimateBestRentalPrice(intRentalTime=4, strRentalBasis="Weekly", _intFullPriceSkis=0, _intDiscountedSkis=0, _intFullPriceSnowboards=4, _intDiscountedSnowboards=0, _dblFamilyDiscount=0, _dblCouponDiscount=10)
 
 #customer1 = strName, intID("Bob", 1)
 #customer2 = strName, intID("Lance", 2)
