@@ -104,7 +104,7 @@ class ShopClass(object):
 
 
 # ------------------------------------------------------------------
-# Method to check the currently available number of Skis and Snowboards
+# Method to check if the requested number of Skis and Snowboards are available for rent
 # ------------------------------------------------------------------ 
     def check_CurrentInventory(self, intRequestedSkis = 0, intRequestedSnowboards = 0):
         if intRequestedSkis > self.intCurrentSkisInventory:
