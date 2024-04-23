@@ -15,7 +15,7 @@ import ShopClass as ShopClass
 	# Testing Area
 	test1 = ShopClass.ShopClass(100,100)  
 	test1.start_Request(intTimeRequested = 1, strRentalBasis = "Hourly", intSkisRequested = 5, intSnowboardsRequested = 0, strCouponCode = "BBP")
-
+	test1.return_Rental(1)
 	#test1.calcEstimateBestRentalPrice(1, "Hourly", 4, 7, 0, 4, 6, 1, 25, 0)
 	#test1.calc_estimatebestrentalprice(8, "Hourly", 2, 2, 10, 10)
 	# print(repr(test1))
