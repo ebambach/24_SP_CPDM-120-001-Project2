@@ -5,6 +5,7 @@
 # Used for .ceil function calculating ideal intRentalTime/strRentalBasis
 import math
 import datetime
+from datetime import datetime, timedelta
 import CustomerClass as Customer
 
 class ShopClass(object):
@@ -52,9 +53,16 @@ class ShopClass(object):
     _dblCouponDiscount = float()
     # List of Customers
     CustomerList = []
-
+    # Skis rented for the day
+    intDailySkisRented = int()
+    # Snowboards rented for the day
+    intDailySnowboardsRented = int()
     # Boolean for checking availbility
     _blnValidation = False
+    # Boolean for performing return, false if performing estimate, true if performing return
+    _blnReturn = False
+    # Daily revenue
+    dblDailyRevenue = float()
 
 
     # Set the initial quantity of Skis and Snowboards, each with a default amount of 0
@@ -111,6 +119,7 @@ class ShopClass(object):
 # String value of Coupon Code (if any)
 # ------------------------------------------------------------------ 
     def start_Request(self, intTimeRequested = 0, strRentalBasis = "Hourly", intSkisRequested = 0, intSnowboardsRequested = 0, strCouponCode = ""):
+        self._blnReturn = False
         # Validate the input for the request
         self.intTimeRequested(intTimeRequested)
         if self._blnValidation == True:
@@ -131,6 +140,28 @@ class ShopClass(object):
                                           self._intFullPriceSnowboards, self._intDiscountedSnowboards)
                         self.confirmRental()
 
+
+
+# ------------------------------------------------------------------
+# Method to start return based on a customer's existing rental
+# ------------------------------------------------------------------ 
+    def return_Rental(self, intID):
+        self._blnReturn = True
+        for obj in self.CustomerList:
+            if intID == obj.intID:
+                # Find the difference between when the rental started and when it was returned
+                intTimeDifference = self.time_Difference(obj.dtmRentalStart, datetime.now())
+                # Give family discount to 3-5 items if present
+                self.getFamilyDiscount(obj.intSkisRented, obj.intSnowboardsRented)
+                # If the strCouponCode endswith "BBP," give the 10% discount
+                self.getCouponDiscount(obj.strCouponCode)
+                # Provide an estimate of the best price based on how much time
+                # is requested, and the basis of said time ("Hourly," "Daily," or "Weekly")
+                self.calcEstimateBestRentalPrice(intTimeDifference, self.strRentalBasis, self._intFullPriceSkis, self._intDiscountedSkis, 
+                                          self._intFullPriceSnowboards, self._intDiscountedSnowboards)
+                # Add the stock back into the inventory
+                self.returnSkis(obj.intSkisRented)
+                self.returnSnowboards(obj.intSnowboardsRented)
 
 
 # ------------------------------------------------------------------
@@ -239,7 +270,7 @@ class ShopClass(object):
 # Method to print when rental begins
 # ------------------------------------------------------------------
     def rentalTime(self):
-        now = datetime.datetime.now()
+        now = datetime.now()
         print("Your rental began on " + str(now.month) + "-" + str(now.day) + "-" + str(now.year) + 
                   " at " + str(now.hour) + ":" + str(now.minute) + ".")
 
@@ -258,13 +289,12 @@ class ShopClass(object):
             # State how many Skis they rented, that the time basis is hourly, at what time the rental occurred, and how much
             # each pair of Skis cost to rent.
             if intRequestedSkis == 1:
-                print("You have successfully rented " + str(intRequestedSkis) +" pair of skis on an hourly basis.")
+                print("You may rent " + str(intRequestedSkis) +" pair of skis on an hourly basis.")
             else:
-                print("You have rented " + str(intRequestedSkis) + " pairs of skis on an hourly basis.")
+                print("You may rent " + str(intRequestedSkis) + " pairs of skis on an hourly basis.")
             self.rentalTime()
             print("The hourly rent is $" + str(self._dblSkisHourly) + " per hour for each pair of skis.")
-            # Reduce the current inventory by the quantity of Skis that were rented.
-            self.intCurrentSkisInventory -= intRequestedSkis
+            
             self._blnValidation = False
 
 
@@ -279,13 +309,13 @@ class ShopClass(object):
             # State how many Snowboards they rented, that the time basis is hourly, at what time the rental occurred, and how much
             # each pair of Snowboards cost to rent.
             if intRequestedSnowboards == 1:
-                print("You have successfully rented " + str(intRequestedSnowboards) +" snowboard on an hourly basis.")
+                print("You may rent " + str(intRequestedSnowboards) +" snowboard on an hourly basis.")
             else:
-                print("You have rented " + str(intRequestedSnowboards) + " snowboards on an hourly basis.")
+                print("You may rent " + str(intRequestedSnowboards) + " snowboards on an hourly basis.")
             self.rentalTime()
             print("The hourly rent is $" + str(self._dblSnowboardsHourly) + " per hour for each snowboard.")
             # Reduce the current inventory by the quantity of Snowboards that were rented.
-            self.intCurrentSnowboardsInventory -= intRequestedSnowboards
+            
             self._blnValidation = False
 
 
@@ -300,13 +330,12 @@ class ShopClass(object):
             # State how many Skis they rented, that the time basis is daily, at what time the rental occurred, and how much
             # each pair of Skis cost to rent.
             if intRequestedSkis == 1:
-                print("You have successfully rented " + str(intRequestedSkis) +" pair of skis on an daily basis.")
+                print("You may rent " + str(intRequestedSkis) +" pair of skis on an daily basis.")
             else:
-                print("You have rented " + str(intRequestedSkis) + " pairs of skis on an daily basis.")
+                print("You may rent " + str(intRequestedSkis) + " pairs of skis on an daily basis.")
             self.rentalTime()
-            print("The daily rent is $" + str(self._dblSkisDaily) + " per day for each pair of skis.")
-            # Reduce the current inventory by the quantity of Skis that were rented.
-            self.intCurrentSkisInventory -= intRequestedSkis
+            print("The daily rent is $" + str(self._dblSkisDaily) + " per day for each pair of skis.")            
+            
             self._blnValidation = False
 
 
@@ -321,13 +350,12 @@ class ShopClass(object):
             # State how many Snowboards they rented, that the time basis is daily, at what time the rental occurred, and how much
             # each pair of Snowboards cost to rent.
             if intRequestedSnowboards == 1:
-                print("You have successfully rented " + str(intRequestedSnowboards) +" snowboard on an daily basis.")
+                print("You may rent " + str(intRequestedSnowboards) +" snowboard on an daily basis.")
             else:
-                print("You have rented " + str(intRequestedSnowboards) + " snowboards on an daily basis.")
+                print("You may rent " + str(intRequestedSnowboards) + " snowboards on an daily basis.")
             self.rentalTime()
             print("The daily rent is $" + str(self._dblSnowboardsDaily) + " per day for each snowboard.")
-            # Reduce the current inventory by the quantity of Snowboards that were rented.
-            self.intCurrentSnowboardsInventory -= intRequestedSnowboards
+            
             self._blnValidation = False
 
 
@@ -342,13 +370,12 @@ class ShopClass(object):
             # State how many Skis they rented, that the time basis is weekly, at what time the rental occurred, and how much
             # each pair of Skis cost to rent.
             if intRequestedSkis == 1:
-                print("You have successfully rented " + str(intRequestedSkis) +" pair of skis on an weekly basis.")
+                print("You may rent " + str(intRequestedSkis) +" pair of skis on an weekly basis.")
             else:
-                print("You have rented " + str(intRequestedSkis) + " pairs of skis on an weekly basis.")
+                print("You may rent " + str(intRequestedSkis) + " pairs of skis on an weekly basis.")
             self.rentalTime()
             print("The weekly rent is $" + str(self._dblSkisWeekly) + " per week for each pair of skis.")
-            # Reduce the current inventory by the quantity of Skis that were rented.
-            self.intCurrentSkisInventory -= intRequestedSkis
+            
             self._blnValidation = False
 
 
@@ -363,13 +390,12 @@ class ShopClass(object):
             # State how many Snowboards they rented, that the time basis is weekly, at what time the rental occurred, and how much
             # each pair of Snowboards cost to rent.
             if intRequestedSnowboards == 1:
-                print("You have successfully rented " + str(intRequestedSnowboards) +" snowboard on an weekly basis.")
+                print("You may rent " + str(intRequestedSnowboards) +" snowboard on an weekly basis.")
             else:
-                print("You have rented " + str(intRequestedSnowboards) + " snowboards on an weekly basis.")
+                print("You may rent " + str(intRequestedSnowboards) + " snowboards on an weekly basis.")
             self.rentalTime()
             print("The weekly rent is $" + str(self._dblSnowboardsWeekly) + " per week for each snowboard.")
-            # Reduce the current inventory by the quantity of Snowboards that were rented.
-            self.intCurrentSnowboardsInventory -= intRequestedSnowboards
+            
             self._blnValidation = False
 
 
@@ -400,13 +426,7 @@ class ShopClass(object):
 
         _intItemsRented = self.intSkisRented + self.intSnowboardsRented
 
-        # Determining the which items get a discount
-        # Is this math mathing???
-        #   The discount for one discounted ski per hour is 3.75, the discount for one discounted snowboard per hour is 2.5
-        #   The discount for one discounted ski per day is 12.5, the discount for one discounted snowboard per day is 10
-        #   The discount for one discounted ski per week is 50, the discount for one discounte snowboard per week is 40
-        #   Therefore, because we want to give the best price, we should discount as many skis as possible before discounting any snowboards
-        # That's what this is based on:
+        # Determining which items get a discount, discounting Skis before Snowboards
         if _intItemsRented < 3:
             self._intFullPriceSkis = intSkisRented
             self._intFullPriceSnowboards = intSnowboardsRented
@@ -454,13 +474,6 @@ class ShopClass(object):
     def calcEstimateBestRentalPrice(self, intRentalTime = 0, strRentalBasis = "Hourly", _intFullPriceSkis = 0, _intDiscountedSkis = 0, _intFullPriceSnowboards = 0, _intDiscountedSnowboards = 0):
         # Rental basis is either Hourly, Daily, or Weekly
         self.strRentalBasis = strRentalBasis
-        #self.intSkisRented = _intFullPriceSkis + _intDiscountedSkis
-        #self.intSnowboardsRented = _intFullPriceSnowboards + _intDiscountedSnowboards
-
-        # I don't know how to pass variables and what to put in the signature :')
-        # This could probably be a loop but I am incapable of doing that rn :')
-        # It's ugly but it works, maybe
-        # We probably should have had separate methods for each RentalBasis
 
         if strRentalBasis == "Hourly":
             if intRentalTime * (self._dblSkisHourly + self._dblSnowboardsHourly) > self._dblSkisWeekly + self._dblSnowboardsWeekly:
@@ -547,8 +560,38 @@ class ShopClass(object):
                 # Calculate for Estimated RentalPrice by adding the Skis Subtotal and Snowboards Subtotal
                 self._dblEstimateRentalPrice = _dblSkisSubtotal + _dblSnowboardsSubtotal 
                 
-        print("The Estimated Rental Price is: ", self._dblEstimateRentalPrice)
+        print("The Rental Price is: ", self._dblEstimateRentalPrice)
+        if self._blnReturn == True:
+            self.collect_Fee()
         return self._dblEstimateRentalPrice
+
+
+
+# ------------------------------------------------------------------
+# Method to accumulate the daily revenue when a rental is returned
+# ------------------------------------------------------------------
+    def collect_Fee(self):
+        self.dblDailyRevenue += self._dblEstimateRentalPrice
+
+
+
+# ------------------------------------------------------------------
+# Method to calculate time difference between initial requested time and actual rental time
+# ------------------------------------------------------------------
+    def time_Difference(self, estimated_Time, actual_Time):
+        # Trim down the time to Year, Month, Day and Hour:Minutes
+        estimated_Time = str(estimated_Time)[:-10]
+        actual_Time = str(actual_Time)[:-10]
+        estimated_Time = datetime.strptime(estimated_Time, "%Y-%m-%d %H:%M")
+        actual_Time = datetime.strptime(actual_Time, "%Y-%m-%d %H:%M")
+        intDaysDifference = (abs((actual_Time - estimated_Time).days))
+        if intDaysDifference > 0:
+            self.strRentalBasis = "Daily"
+            return intDaysDifference
+        else:
+            intHoursDifference = ((actual_Time.hour - estimated_Time.hour))
+            self.strRentalBasis = "Hourly"
+            return intHoursDifference
 
 
 
@@ -563,66 +606,11 @@ class ShopClass(object):
             intID = int(input("Please your phone number: "))
             self.CustomerList.append(Customer.CustomerClass(strCustomerName, intID, self.intTimeRequested, self.strRentalBasis, 
                                          self.intSkisRented, self.intSnowboardsRented, 
-                                         self.strCouponCode, datetime.datetime.now()))
-
-
-
-        #if strRentalBasis == "Hourly":
-        #    if intRentalTime * (self._dblSkisHourly + self._dblSnowboardsHourly) > self._dblSkisWeekly + self._dblSnowboardsWeekly:
-        #        # Weekly was determined to be cheaper than Hourly, charge the Weekly rate  
-        #        strRentalBasis = "Weekly"
-        #        if self.intSkisRented > 0:
-        #            self.rentSkisWeekly(self.intSkisRented)
-        #        if self.intSnowboardsRented > 0:
-        #            self.rentSnowboardsWeekly(self.intSnowboardsRented)
-        #        intRentalTime = math.ceil(intRentalTime  / 168)
-        #        _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisWeekly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsWeekly)) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))
-        #    else:
-        #        if intRentalTime * (self._dblSkisHourly + self._dblSnowboardsHourly) > self._dblSkisDaily + self._dblSnowboardsDaily:
-        #            # Daily was determined to be cheaper than Hourly, charge the Daily rate  
-        #            strRentalBasis = "Daily"
-        #            if self.intSkisRented > 0:
-        #                self.rentSkisDaily(self.intSkisRented)
-        #            if self.intSnowboardsRented > 0:
-        #                self.rentSnowboardsDaily(self.intSnowboardsRented)
-        #            intRentalTime = math.ceil(intRentalTime / 24)
-        #            _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisDaily) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsDaily)) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))
-        #        else:
-        #            # Charge the Hourly rate
-        #            if self.intSkisRented > 0:
-        #                self.rentSkisHourly(self.intSkisRented)
-        #            if self.intSnowboardsRented > 0:
-        #                self.rentSnowboardsHourly(self.intSnowboardsRented)
-        #            _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisHourly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsHourly)) * (1 - ((_dblFamilyDiscount + _dblCouponDiscount) / 100))
-        #else:
-        #    if strRentalBasis == "Daily":
-        #        if intRentalTime * (self._dblSkisDaily * self._dblSnowboardsDaily) > self._dblSkisWeekly + self._dblSnowboardsWeekly:
-        #            # Weekly was determined to be cheaper than Daily, charge the Weekly rate
-        #            strRentalBasis = "Weekly"
-        #            if self.intSkisRented > 0:
-        #                self.rentSkisWeekly(self.intSkisRented)
-        #            if self.intSnowboardsRented > 0:
-        #                self.rentSnowboardsWeekly(self.intSnowboardsRented)
-        #            intRentalTime = math.ceil(intRentalTime  / 168)
-        #            _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisWeekly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsWeekly)) * (1 - ((_dblFamilyDiscount + _dblCoupon) / 100))
-        #        else:
-        #            # charge the Daily rate
-        #            if self.intSkisRented > 0:
-        #                self.rentSkisDaily(self.intSkisRented)
-        #            if self.intSnowboardsRented > 0:
-        #                self.rentSnowboardsDaily(self.intSnowboardsRented)
-        #            intRentalTime = math.ceil(intRentalTime / 24)
-        #            _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisDaily) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsDaily)) * (1 - ((_dblFamilyDiscount + _dblCoupon) / 100))
-        #    else:
-        #        # Charge the Weekly rate
-        #        if self.intSkisRented > 0:
-        #            self.rentSkisWeekly(self.intSkisRented)
-        #        if self.intSnowboardsRented > 0:
-        #            self.rentSnowboardsWeekly(self.intSnowboardsRented)
-        #        intRentalTime = math.ceil(intRentalTime  / 168)  
-        #        _dblEstimateRentalPrice = ((intSkisRented * intRentalTime * self._dblSkisWeekly) + (intSnowboardsRented * intRentalTime * self._dblSnowboardsWeekly)) * (1 - ((_dblFamilyDiscount + _dblCoupon) / 100))
-        #print("The Estimated Rental Price is: ", _dblEstimateRentalPrice)
-        #return _dblEstimateRentalPrice
-
+                                         self.strCouponCode, datetime.now()))
+            self.intCurrentSkisInventory -= self.intSkisRented
+            self.intCurrentSnowboardsInventory -= self.intSnowboardsRented
+            self.intDailySkisRented += self.intSkisRented
+            self.intDailySnowboardsRented += self.intSnowboardsRented
+            
 
 
