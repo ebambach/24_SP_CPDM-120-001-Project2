@@ -176,7 +176,7 @@ class ShopClass(object):
         self.getCouponDiscount(strCouponCode)
         # Provide an estimate of the best price based on how much time
         # is requested, and the basis of said time ("Hourly," "Daily," or "Weekly")
-        self.calcEstimateBestRentalPrice(self.intTimeRequested, self._intFullPriceSkis, self._intDiscountedSkis, 
+        self.calcEstimateBestRentalPrice(intTimeRequested, self._intFullPriceSkis, self._intDiscountedSkis, 
                                           self._intFullPriceSnowboards, self._intDiscountedSnowboards)
         print(str(self._dblEstimateRentalPrice))
         return self._dblEstimateRentalPrice
