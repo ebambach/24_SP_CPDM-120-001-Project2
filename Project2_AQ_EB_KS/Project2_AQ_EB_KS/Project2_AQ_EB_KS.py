@@ -348,6 +348,7 @@ class ShopClass(object):
             # Set the numerical value of the discount applied to the order
             self.dblDiscountValue = self.dblSubTotal - self.dblGrandTotal
             self.collect_Fee()
+            return self.dblSubTotal, self.dblDiscountValue, self.dblGrandTotal
         return self._dblEstimateRentalPrice
 
 
