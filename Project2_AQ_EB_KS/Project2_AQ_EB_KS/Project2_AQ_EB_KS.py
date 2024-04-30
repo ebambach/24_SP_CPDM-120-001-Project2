@@ -178,7 +178,7 @@ class ShopClass(object):
         # is requested, and the basis of said time ("Hourly," "Daily," or "Weekly")
         self.calcEstimateBestRentalPrice(self.intTimeRequested, self._intFullPriceSkis, self._intDiscountedSkis, 
                                           self._intFullPriceSnowboards, self._intDiscountedSnowboards)
-
+        return self._dblEstimateRentalPrice
 
 
 # ------------------------------------------------------------------
@@ -203,7 +203,7 @@ class ShopClass(object):
                 # Add the stock back into the inventory
                 self.returnSkis(obj.intSkisRented)
                 self.returnSnowboards(obj.intSnowboardsRented)
-
+                return self.dblSubTotal, self.dblDiscountValue, self.dblGrandTotal
 
 
 # ------------------------------------------------------------------
