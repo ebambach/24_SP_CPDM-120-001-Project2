@@ -2,7 +2,9 @@
 # Assignment Name:      Project 2
 # Name:                 Team B
 # -----------------------------------------------------------------
-
+from ShopClass import ShopClass
+import datetime
+from datetime import datetime, timedelta
 # ------------------------------------------------------------------
 # Project 2 Class Area
 # ------------------------------------------------------------------
@@ -126,3 +128,54 @@ class CustomerClass(object):
 		else:
 			self._strCouponCode = ""
 			raise Exception("The coupon code has to have letters. The value of strCouponCode was: {}".format(strInput))
+
+
+
+# ------------------------------------------------------------------
+# Method for when a Customer is ready to rent items
+# ------------------------------------------------------------------
+	def start_Rental(self, intRentalTime, strRentalBasis, intSkisRented, intSnowboardsRented, strCouponCode):
+		blnValidRental = bool(False)
+		# Were any pieces of equipment actually requested?
+		if intSkisRented > 0 or intSnowboardsRented > 0:
+			intSkisInventory = int(ShopClass.get_CurrentSkisInventory())
+			intSnowboardsInventory = int(ShopClass.get_CurrentSnowboardsInventory())
+			# Is the request less than or equal to the current inventory?
+			if intSkisInventory >= intSkisRented and intSnowboardsInventory>= intSnowboardsRented:			   
+				# Remove the amount of equipment rented from the current inventory
+				ShopClass.intCurrentSkisInventory -= intSkisRented
+				ShopClass.intCurrentSnowboardsInventory -= intSnowboardsRented
+
+				# Record the amount of equipment rented to the Customer
+				self.intSkisRented += intSkisRented
+				self.intSnowboardsRented += intSnowboardsRented				
+
+				# Add the amount of equipment rented to the value for the day's rentals
+				ShopClass.intDailySkisRented += intSkisRented
+				ShopClass.intDailySnowboardsRented += intSnowboardsRented
+
+				blnValidRental = True
+				# Calculate the estimated best price
+				ShopClass.start_Request(self, intRentalTime, strRentalBasis, intSkisRented, intSnowboardsRented, strCouponCode)
+			else:
+				blnValidRental = False
+		else:
+			blnValidRental = False
+
+		return blnValidRental
+
+
+
+# ------------------------------------------------------------------
+# Method for when a Customer is ready to return Skis and/or Snowboards
+# ------------------------------------------------------------------
+	def end_Rental(self, strName, intID, strRentalBasis = "Hourly", intSkisRented = 0, intSnowboardsRented = 0, strCouponCode = "", dtmRentalStart = datetime.now() + timedelta(hours=-3)):
+		# Return the amount of equipment rented to the current inventory
+		ShopClass.intCurrentSkisInventory += intSkisRented
+		ShopClass.intCurrentSnowboardsInventory += intSnowboardsRented
+
+		# Perform the math to get the grand total of the order
+		ShopClass.return_Rental(self, strName, intID, strRentalBasis, intSkisRented, intSnowboardsRented, strCouponCode, dtmRentalStart)
+
+		# Add the grand total to the daily revenue
+		ShopClass.collect_Fee(ShopClass.dblGrandTotal)
