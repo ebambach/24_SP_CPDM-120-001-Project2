@@ -4,6 +4,8 @@
 # -----------------------------------------------------------------
 import CustomerClass as Customer
 import ShopClass as ShopClass
+import datetime
+from datetime import datetime, timedelta
 
 
 
@@ -14,8 +16,13 @@ import ShopClass as ShopClass
 # try:
 	# Testing Area
 test1 = ShopClass.ShopClass(100,100)  
-test1.start_Request(intTimeRequested = 1, strRentalBasis = "Hourly", intSkisRequested = 5, intSnowboardsRequested = 0, strCouponCode = "BBP")
-test1.return_Rental(1)
+#test1.start_Request(intTimeRequested = 1, strRentalBasis = "Hourly", intSkisRequested = 5, intSnowboardsRequested = 0, strCouponCode = "BBP")
+test2 = Customer.CustomerClass(strName = "Crystal", intID = 1, intRentalTime = 1, strRentalBasis = "Hourly", intSkisRented = 5, intSnowboardsRented = 0, strCouponCode = "", dtmRentalStart = (datetime.now() + timedelta(hours=-1)))
+test2.start_Rental(intRentalTime = 1, strRentalBasis = "Hourly", intSkisRented = 5, intSnowboardsRented = 0, strCouponCode = "")
+test2.end_Rental(strName = "Crystal", intID = 1, strRentalBasis = "Hourly", intSkisRented = 5, intSnowboardsRented = 0, strCouponCode = "", dtmRentalStart = (datetime.now() + timedelta(hours=-1)))
+
+#test2.start_Rental(1, 1)
+#test2.end_Rental(1)
 	#test1.calcEstimateBestRentalPrice(1, "Hourly", 4, 7, 0, 4, 6, 1, 25, 0)
 	#test1.calc_estimatebestrentalprice(8, "Hourly", 2, 2, 10, 10)
 	# print(repr(test1))
